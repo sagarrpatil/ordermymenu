@@ -49,7 +49,7 @@ const BuyNowButton = () => {
             <a
               target='_blank'
               rel='noreferrer'
-              href='https://OMM.com/products/materio-mui-react-nextjs-admin-template/'
+              href='https://OMM.com/products/ /'
             >
               <img width='100%' alt='materio-pro-banner' src='/images/misc/materio-pro-banner.png' />
             </a>
@@ -69,7 +69,7 @@ const BuyNowButton = () => {
                 sx={{ mr: 4 }}
                 target='_blank'
                 variant='contained'
-                href='https://demos.OMM.com/materio-mui-react-nextjs-admin-template/landing/'
+                href='https://demos.OMM.com/ /landing/'
               >
                 Demo
               </Button>
@@ -77,7 +77,7 @@ const BuyNowButton = () => {
                 component='a'
                 target='_blank'
                 variant='outlined'
-                href='https://OMM.com/products/materio-mui-react-nextjs-admin-template/'
+                href='https://OMM.com/products/ /'
               >
                 Download
               </Button>
