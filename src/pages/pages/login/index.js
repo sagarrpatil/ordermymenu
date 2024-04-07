@@ -4,7 +4,8 @@ import { useState } from 'react'
 // ** Next Imports
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-
+import { auth, googleProvider } from '../../../firebase';
+import firebase from '../../../firebase';
 // ** MUI Components
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -63,6 +64,8 @@ const LoginPage = () => {
     password: '',
     showPassword: false
   })
+  const [err, setErr] = useState('');
+  const [email, setEmail] = useState("")
 
   // ** Hook
   const theme = useTheme()
@@ -79,7 +82,25 @@ const LoginPage = () => {
   const handleMouseDownPassword = event => {
     event.preventDefault()
   }
-
+  const signInWithEmailPassword = async () => {
+    try {
+      let key = await auth.signInWithEmailAndPassword(email, values.password);
+      localStorage.setItem("googleAccount", JSON.stringify(key.user));
+      router.push('/');
+    } catch (error) {
+      setErr("Invalid Email or Password");
+      console.log(JSON.parse(error.message).error.message);
+    }
+  };
+  const signInWithGoogle = async () => {
+    try {
+      const result = await auth.signInWithPopup(googleProvider);
+      localStorage.setItem("googleAccount", JSON.stringify(result.user));
+      router.push('/');
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
   return (
     <Box className='content-center'>
       <Card sx={{ zIndex: 1 }}>
@@ -95,7 +116,7 @@ const LoginPage = () => {
             <Typography variant='body2'>Please sign-in to your account and start the adventure</Typography>
           </Box>
           <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <TextField autoFocus fullWidth id='email' label='Email' sx={{ marginBottom: 4 }} />
+            <TextField autoFocus fullWidth value={email} id='email' onChange={(e)=>setEmail(e.target.value)} label='Email' sx={{ marginBottom: 4 }} />
             <FormControl fullWidth>
               <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
               <OutlinedInput
@@ -126,12 +147,13 @@ const LoginPage = () => {
                 <LinkStyled onClick={e => e.preventDefault()}>Forgot Password?</LinkStyled>
               </Link>
             </Box>
+            {err && <p style={{ color: "red" }}>{err}</p>}
             <Button
               fullWidth
               size='large'
               variant='contained'
               sx={{ marginBottom: 7 }}
-              onClick={() => router.push('/')}
+              onClick={() => signInWithEmailPassword()}
             >
               Login
             </Button>
@@ -148,7 +170,7 @@ const LoginPage = () => {
             <Divider sx={{ my: 5 }}>or</Divider>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
+                <IconButton component='a' onClick={() => signInWithGoogle()}>
                 <Google sx={{ color: '#db4437' }} />oogle
                 </IconButton>
               </Link>

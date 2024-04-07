@@ -49,6 +49,11 @@ const UserDropdown = () => {
     }
     setAnchorEl(null)
   }
+  const logout = () =>{
+    localStorage.clear();
+    sessionStorage.clear();
+    router.push("/pages/login/");
+  }
 
   const styles = {
     py: 2,
@@ -144,7 +149,7 @@ const UserDropdown = () => {
           </Box>
         </MenuItem>
         <Divider />
-        <MenuItem sx={{ py: 2 }} onClick={() => handleDropdownClose('/pages/login')}>
+        <MenuItem sx={{ py: 2 }} onClick={() => logout()}>
           <LogoutVariant sx={{ marginRight: 2, fontSize: '1.375rem', color: 'text.secondary' }} />
           Logout
         </MenuItem>
