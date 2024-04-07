@@ -2,6 +2,8 @@
 
 # Xcode
 #
+yarn.lock
+package-lock.json
 .next
 build/
 *.pbxuser
