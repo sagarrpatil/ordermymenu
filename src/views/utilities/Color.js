@@ -93,10 +93,10 @@ const UIColor = () => (
               <ColorBox bgcolor="secondary.main" data={{ label: 'DeepPurple-500', color: '#673ab7' }} title="secondary.main" />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2}>
-              <ColorBox bgcolor="secondary.dark" data={{ label: 'DeepPurple-600', color: '#5e35b1' }} title="secondary.dark" />
+              <ColorBox bgcolor="secondary.dark" data={{ label: 'DeepPurple-600', color: 'orange' }} title="secondary.dark" />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2}>
-              <ColorBox bgcolor="secondary.800" data={{ label: 'DeepPurple-800', color: '#4527a0' }} title="secondary[800]" />
+              <ColorBox bgcolor="secondary.800" data={{ label: 'DeepPurple-800', color: 'yellow' }} title="secondary[800]" />
             </Grid>
           </Grid>
         </SubCard>
