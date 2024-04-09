@@ -1,8 +1,8 @@
 {
-  "name": "berry-free-material-react-cra",
+  "name": "Order My Menu-free-material-react-cra",
   "version": "3.4.2",
   "private": true,
-  "homepage": "https://berrydashboard.io/free",
+  "homepage": "https://ordermymenu.io/free",
   "dependencies": {
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.3",

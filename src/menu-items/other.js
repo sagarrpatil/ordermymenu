@@ -22,7 +22,7 @@ const other = {
       id: 'documentation',
       title: 'Documentation',
       type: 'item',
-      url: 'https://codedthemes.gitbook.io/berry/',
+      url: 'https://Order My Menu.gitbook.io/Order My Menu/',
       icon: icons.IconHelp,
       external: true,
       target: true
