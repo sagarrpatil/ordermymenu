@@ -1,8 +1,8 @@
 {
-  "name": "Order My Menu-free-material-react-cra",
+  "name": "Order My Menu",
   "version": "3.4.2",
   "private": true,
-  "homepage": "https://ordermymenu.io/free",
+  "homepage": "https://ordermymenu.io/",
   "dependencies": {
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.3",
