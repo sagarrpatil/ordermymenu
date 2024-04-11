@@ -57,6 +57,8 @@ const ProfileSection = () => {
   const anchorRef = useRef(null);
   const handleLogout = async () => {
     console.log('Logout');
+    localStorage.clear();
+    window.location.href ="/";
   };
 
   const handleClose = (event) => {

@@ -34,7 +34,7 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from '@firebase/firestore';
+import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc } from '@firebase/firestore';
 import { db } from '../../../../firebase';
 import Google from 'assets/images/icons/social-google.svg';
 
@@ -73,7 +73,14 @@ const FirebaseLogin = ({ ...others }) => {
         try {
           const collectionRef = collection(db, result._tokenResponse.email); // Replace with your collection name
           const dataToCreate = result._tokenResponse;
-          await addDoc(collectionRef, dataToCreate);
+          let obj ={
+            displayName : dataToCreate.displayName,
+            email: dataToCreate.email,
+            photoUrl: dataToCreate.photoUrl,
+            localId: dataToCreate.localId
+          }
+          const docRef = doc(collectionRef, result._tokenResponse.email);
+          await setDoc(docRef, obj);
           window.location.href = "/";
         } catch (error) {
           console.error("Error creating data:", error);
