@@ -26,6 +26,8 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 
 // project imports
+import { auth, provider } from '../../../../firebase';
+import { signInWithPopup } from "@firebase/auth";
 import useScriptRef from 'hooks/useScriptRef';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
@@ -45,7 +47,15 @@ const FirebaseLogin = ({ ...others }) => {
   const [checked, setChecked] = useState(true);
 
   const googleHandler = async () => {
-    console.error('Login');
+    signInWithPopup(auth, provider)
+    .then((result) => {
+      console.log(btoa(JSON.stringify(result)))
+      window.location.href = "/";
+    })
+    .catch((error) => {
+      // Handle Errors here.
+      // ...
+    });
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -81,7 +91,7 @@ const FirebaseLogin = ({ ...others }) => {
             </Button>
           </AnimateButton>
         </Grid>
-        <Grid item xs={12}>
+        {/*<Grid item xs={12}>
           <Box
             sx={{
               alignItems: 'center',
@@ -110,15 +120,15 @@ const FirebaseLogin = ({ ...others }) => {
 
             <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
           </Box>
-        </Grid>
-        <Grid item xs={12} container alignItems="center" justifyContent="center">
+        </Grid>*/}
+         {/*<Grid item xs={12} container alignItems="center" justifyContent="center">
           <Box sx={{ mb: 2 }}>
             <Typography variant="subtitle1">Sign in with Email address</Typography>
           </Box>
-        </Grid>
+        </Grid>*/}
       </Grid>
 
-      <Formik
+      {/*<Formik
         initialValues={{
           email: 'info@Order My Menu.com',
           password: '123456',
@@ -222,7 +232,7 @@ const FirebaseLogin = ({ ...others }) => {
             </Box>
           </form>
         )}
-      </Formik>
+            </Formik>*/}
     </>
   );
 };
