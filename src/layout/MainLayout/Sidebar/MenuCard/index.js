@@ -109,14 +109,14 @@ const MenuCard = () => {
               sx={{ mt: 0 }}
               primary={
                 <Typography variant="subtitle1" sx={{ color: theme.palette.primary[800] }}>
-                  Get Extra Space
+                  Get Premium Plan
                 </Typography>
               }
-              secondary={<Typography variant="caption"> 28/23 GB</Typography>}
+              secondary={<Typography variant="caption"> Rs 3000 per year</Typography>}
             />
           </ListItem>
         </List>
-        <LinearProgressWithLabel value={80} />
+        <LinearProgressWithLabel value={100} />
       </CardContent>
     </CardStyle>
   );

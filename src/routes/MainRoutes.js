@@ -40,7 +40,7 @@ const MainRoutes = {
       path: 'utils',
       children: [
         {
-          path: 'util-typography',
+          path: 'menu',
           element: <UtilsTypography />
         }
       ]

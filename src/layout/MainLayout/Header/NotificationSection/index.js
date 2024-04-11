@@ -141,7 +141,7 @@ const NotificationSection = () => {
           ]
         }}
       >
-        {({ TransitionProps }) => (
+        {/* {({ TransitionProps }) => (
           <Transitions position={matchesXs ? 'top' : 'top-right'} in={open} {...TransitionProps}>
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
@@ -210,7 +210,7 @@ const NotificationSection = () => {
               </ClickAwayListener>
             </Paper>
           </Transitions>
-        )}
+        )} */}
       </Popper>
     </>
   );

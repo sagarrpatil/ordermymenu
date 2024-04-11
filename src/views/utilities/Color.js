@@ -57,7 +57,7 @@ ColorBox.propTypes = {
 // ===============================|| UI COLOR ||=============================== //
 
 const UIColor = () => (
-  <MainCard title="Color Palette" secondary={<SecondaryAction link="https://next.material-ui.com/system/palette/" />}>
+  <MainCard title="Color Palette" secondary={<SecondaryAction link="https:// -ui.com/system/palette/" />}>
     <Grid container spacing={gridSpacing}>
       <Grid item xs={12}>
         <SubCard title="Primary Color">
