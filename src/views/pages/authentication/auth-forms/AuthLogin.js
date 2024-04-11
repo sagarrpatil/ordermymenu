@@ -49,7 +49,7 @@ const FirebaseLogin = ({ ...others }) => {
   const googleHandler = async () => {
     signInWithPopup(auth, provider)
     .then((result) => {
-      console.log(btoa(JSON.stringify(result)))
+      localStorage.setItem("token", btoa(JSON.stringify(result)));
       window.location.href = "/";
     })
     .catch((error) => {

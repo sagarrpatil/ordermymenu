@@ -7,5 +7,9 @@ import AuthenticationRoutes from './AuthenticationRoutes';
 // ==============================|| ROUTING RENDER ||============================== //
 
 export default function ThemeRoutes() {
-  return useRoutes([MainRoutes, AuthenticationRoutes]);
+  if(localStorage.getItem("token")){
+    return useRoutes([MainRoutes]);
+  }else{
+    return useRoutes([AuthenticationRoutes]);
+  }
 }

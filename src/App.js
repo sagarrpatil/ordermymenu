@@ -11,11 +11,17 @@ import themes from 'themes';
 
 // project imports
 import NavigationScroll from 'layout/NavigationScroll';
+import { useEffect } from 'react';
 
 // ==============================|| APP ||============================== //
 
 const App = () => {
   const customization = useSelector((state) => state.customization);
+  // useEffect(() => {
+  //   if(!localStorage.getItem("token")){
+  //       window.location.href = "/pages/login/login3";
+  //   }
+  // },[])
 
   return (
     <StyledEngineProvider injectFirst>
