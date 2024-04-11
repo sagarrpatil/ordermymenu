@@ -93,7 +93,7 @@ const UIColor = () => (
               <ColorBox bgcolor="secondary.main" data={{ label: 'DeepPurple-500', color: '#fc5e03' }} title="secondary.main" />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2}>
-              <ColorBox bgcolor="secondary.dark" data={{ label: 'DeepPurple-600', color: 'orange' }} title="secondary.dark" />
+              <ColorBox bgcolor="secondary.dark" data={{ label: 'DeepPurple-600', color: '#773200' }} title="secondary.dark" />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2}>
               <ColorBox bgcolor="secondary.800" data={{ label: 'DeepPurple-800', color: '#fc5e03' }} title="secondary[800]" />
@@ -120,16 +120,16 @@ const UIColor = () => (
         </SubCard>
       </Grid>
       <Grid item xs={12}>
-        <SubCard title="Orange Color">
+        <SubCard title="#773200 Color">
           <Grid container spacing={gridSpacing}>
             <Grid item xs={12} sm={6} md={4} lg={2}>
-              <ColorBox bgcolor="orange.light" data={{ label: 'DeepOrange-50', color: '#fbe9e7' }} title="orange.light" dark />
+              <ColorBox bgcolor="#773200.light" data={{ label: 'Deep#773200-50', color: '#fbe9e7' }} title="#773200.light" dark />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2}>
-              <ColorBox bgcolor="orange.main" data={{ label: 'DeepOrange-200', color: '#ffab91' }} title="orange.main" />
+              <ColorBox bgcolor="#773200.main" data={{ label: 'Deep#773200-200', color: '#ffab91' }} title="#773200.main" />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2}>
-              <ColorBox bgcolor="orange.dark" data={{ label: 'DeepOrange-800', color: '#d84315' }} title="orange.dark" />
+              <ColorBox bgcolor="#773200.dark" data={{ label: 'Deep#773200-800', color: '#d84315' }} title="#773200.dark" />
             </Grid>
           </Grid>
         </SubCard>
