@@ -1,6 +1,6 @@
 import { initializeApp } from '@firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithRedirect } from "@firebase/auth";
-
+import { getFirestore } from '@firebase/firestore';
 var firebaseConfig = {
   apiKey: "AIzaSyD3KH-CmfDqRNwcQUg_MFYV94LpRFONYj8",
   authDomain: "ordermymenus.firebaseapp.com",
@@ -14,11 +14,11 @@ var firebaseConfig = {
   
   // if (!firebase.apps.length) {
     const app =  initializeApp(firebaseConfig);
-
+    const db = getFirestore(app);
   // }
   // const storage = firebase.storage();
   export  {
-    // storage, 
+    db, 
     app as default
   }
 export const auth = getAuth(app);

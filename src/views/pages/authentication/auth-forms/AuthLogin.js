@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 // material-ui
@@ -34,7 +34,8 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
+import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from '@firebase/firestore';
+import { db } from '../../../../firebase';
 import Google from 'assets/images/icons/social-google.svg';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
@@ -46,11 +47,38 @@ const FirebaseLogin = ({ ...others }) => {
   const customization = useSelector((state) => state.customization);
   const [checked, setChecked] = useState(true);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const collectionRef = collection(db, 'yourCollectionName'); 
+        const querySnapshot = await getDocs(collectionRef);
+        const items = [];
+        querySnapshot.forEach((doc) => {
+          items.push({ id: doc.id, ...doc.data() });
+        });
+        console.log(items);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+  
+    fetchData();
+  
+  }, []);
+
   const googleHandler = async () => {
     signInWithPopup(auth, provider)
-    .then((result) => {
+    .then(async (result) => {
       localStorage.setItem("token", btoa(JSON.stringify(result)));
-      window.location.href = "/";
+        try {
+          const collectionRef = collection(db, result._tokenResponse.email); // Replace with your collection name
+          const dataToCreate = result._tokenResponse;
+          await addDoc(collectionRef, dataToCreate);
+          window.location.href = "/";
+        } catch (error) {
+          console.error("Error creating data:", error);
+          // Handle errors appropriately (e.g., display an error message to the user)
+        }
     })
     .catch((error) => {
       // Handle Errors here.
