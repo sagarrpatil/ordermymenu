@@ -51,6 +51,7 @@ const ProfileSection = () => {
   const [notification, setNotification] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
+  const data = JSON.parse(atob(localStorage.getItem("token")));
   /**
    * anchorRef is used on different componets and specifying one type leads to other components throwing an error
    * */
@@ -82,6 +83,7 @@ const ProfileSection = () => {
 
   const prevOpen = useRef(open);
   useEffect(() => {
+    console.log(data)
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
@@ -113,7 +115,7 @@ const ProfileSection = () => {
         }}
         icon={
           <Avatar
-            src={User1}
+            src={data.user.photoURL}
             sx={{
               ...theme.typography.mediumAvatar,
               margin: '8px 0 8px 8px !important',
@@ -159,9 +161,9 @@ const ProfileSection = () => {
                   <Box sx={{ p: 2 }}>
                     <Stack>
                       <Stack direction="row" spacing={0.5} alignItems="center">
-                        <Typography variant="h4">Good Morning,</Typography>
+                        <Typography variant="h4">Welcome,</Typography>
                         <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                          Johne Doe
+                          {data.user.displayName}
                         </Typography>
                       </Stack>
                       <Typography variant="subtitle2">Project Admin</Typography>
