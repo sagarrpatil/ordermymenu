@@ -28,6 +28,9 @@ import { db } from '../../firebase';
 
 const Typography = () => {
   const [open, setOpen] = React.useState(false);
+  const [menuType, setMenuType] = React.useState("");
+  const [TypeOfProducts, setTypeOfProducts] = React.useState(null);
+  const [menuopen, setMenuOpen] = React.useState("");
   const [productType, setProductType] = React.useState("");
   const [productName, setProductName] = React.useState("");
   const [productPrice, setProductPrice] = React.useState("");
@@ -54,8 +57,24 @@ const Typography = () => {
       console.error("Error fetching data:", error);
     }
   };
+  const fetchDataType = async () => {
+    try {
+      const userDocRef = doc(db, data.user.email, 'MenuOrganization'); 
+      const menuItemsCollectionRef = collection(userDocRef, 'MenuTypes');
+      const querySnapshot = await getDocs(menuItemsCollectionRef);
+      const items = [];
+      querySnapshot.forEach((doc) => {
+        items.push(doc.data().type);
+      });
+      setTypeOfProducts([...new Set(items)])
+      console.log(TypeOfProducts);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   useEffect(() => {
     fetchData();
+    fetchDataType();
   }, []);
   useEffect(() => {
     if(obj){
@@ -74,6 +93,11 @@ const Typography = () => {
     setProductPrice("");
     setError("");
   };
+  const handleMenuClose = () => {
+    setMenuOpen(false);
+    setMenuType("");
+    setError("");
+  };
   const onChangeProductName = (e, newValue) => {
     setProductType(newValue)
   }
@@ -87,6 +111,22 @@ const Typography = () => {
       console.log("Item deleted successfully!");
     } catch (error) {
       console.error("Error deleting item:", error);
+    }
+  }
+  const handleSubmitMenuType = async () =>{
+    console.log(menuType)
+    if(menuType !== "")
+    try {
+      const userDocRef = doc(db, data.user.email, 'MenuOrganization'); // Replace with your collection name
+      const menuItemsCollectionRef = collection(userDocRef, 'MenuTypes');
+      await addDoc(menuItemsCollectionRef, { type: menuType });
+      handleMenuClose();
+      fetchDataType();
+    } catch (error) {
+      console.error("Error creating data:", error);
+      setOpen(false);
+    } else{
+      setError("Please check all the Fields")
     }
   }
   const handleSubmit = async () =>{
@@ -121,7 +161,11 @@ const Typography = () => {
     }
   }
 
-  return (<MainCard title="Menu Management" secondary={<Button variant="outlined" onClick={() => handleClickOpen()}>Add Menu Items</Button>}>
+  return (<MainCard title="Menu Management" secondary={
+    <div >
+    <Button variant="outlined" onClick={() => setMenuOpen(true)}>New Menu Type</Button> <Button variant="outlined" onClick={() => handleClickOpen()}>Add Menu Items</Button>
+    </div>
+  }>
     <Grid container spacing={gridSpacing}>
      
       <Grid item xs={12} sm={12}>
@@ -169,7 +213,33 @@ const Typography = () => {
    
     </Grid>
 
-  
+    <Dialog
+        open={menuopen}
+        onClose={handleMenuClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title" style={{fontSize:16}}>
+          {"Add New Menu Type"}
+        </DialogTitle>
+        <DialogContent>
+       {err &&<b style={{color: "red"}}>{err} * <br/></b>}
+          
+          <br/>
+          
+          <DialogContentText id="alert-dialog-description">
+            <TextField   value={menuType} onChange={(e) => setMenuType(e.target.value)} placeholder='Menu Type' sx={{ width: 300 }}/> <br/><br/>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleMenuClose}>
+            Close
+          </Button>
+          <Button onClick={handleSubmitMenuType} autoFocus color='success' variant="contained" >
+            Save
+          </Button>
+        </DialogActions>
+    </Dialog>
 
     <Dialog
         open={open}
@@ -177,7 +247,7 @@ const Typography = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
+        <DialogTitle id="alert-dialog-title" style={{fontSize:16}}>
           {obj ? "Update your menu":"Add Your Menu"}
         </DialogTitle>
         <DialogContent>
@@ -189,7 +259,7 @@ const Typography = () => {
               value={productType}
               onChange={(event, newValue) => onChangeProductName(event, newValue)}
               id="combo-box-demo"
-              options={type}
+              options={TypeOfProducts}
               sx={{ width: 300 }}
               renderInput={(params) => <TextField {...params} label="Product Type" />}
             /><br/>
@@ -215,4 +285,4 @@ export default Typography;
 var type = [
  'Baverages',
   'Mojito'
-   ]
+]
