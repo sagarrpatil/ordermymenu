@@ -45,7 +45,7 @@ const Typography = () => {
   const data = JSON.parse(atob(localStorage.getItem("token")));
   const [menuList, setMenuList] = React.useState(null);
   const [obj, setObj] = React.useState(null);
-
+  const [sectionSelected, setSectionSelected] = React.useState(null);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -58,13 +58,14 @@ const Typography = () => {
       querySnapshot.forEach((doc) => {
         items.push({ id: doc.id, ...doc.data() });
       });
-      setMenuList(items)
+      setMenuList(items);
+      fetchDataType(items);
       console.log(items);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-  const fetchDataType = async () => {
+  const fetchDataType = async (menulistdata) => {
     try {
       const userDocRef = doc(db, data.user.email, 'MenuOrganization'); 
       const menuItemsCollectionRef = collection(userDocRef, 'MenuTypes');
@@ -75,7 +76,8 @@ const Typography = () => {
       });
       let val = [...new Set(items)];
       setTypeOfProducts(val);
-      selectMenuList(val[0]);
+      setSectionSelected(val[0]);
+      selectMenuList(val[0], menulistdata);
       console.log(TypeOfProducts);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -83,7 +85,6 @@ const Typography = () => {
   };
   useEffect(() => {
     fetchData();
-    fetchDataType();
   }, []);
   useEffect(() => {
     if(obj){
@@ -169,8 +170,9 @@ const Typography = () => {
       setError("Please check all the Fields")
     }
   }
-  const selectMenuList = (val) =>{
-    setMenuListType(menuList.filter(x => x.productType === val))
+  const selectMenuList = (val, menulistdata) =>{
+    setSectionSelected(val)
+    setMenuListType(menulistdata.filter(x => x.productType === val))
   }
 
   return (<MainCard title="Menu Management" secondary={
@@ -182,12 +184,12 @@ const Typography = () => {
     <Grid item xs={3} sm={3} sx={{position: "relative"}}>
             <Button variant="outlined" onClick={() => setMenuOpen(true)}>Add Menu Type</Button>
             <MenuList dense>
-            <Divider />
+            <Divider style={{margin:0}}/>
               {TypeOfProducts && TypeOfProducts.map(val =>  <>
-                <MenuItem onClick={() => selectMenuList(val)}>
-                  <ListItemText>{val}</ListItemText>
+                <MenuItem style={{backgroundColor: (sectionSelected === val)  ? "tomato" : "#fff"}} onClick={() => selectMenuList(val, menuList)}>
+                  <ListItemText style={{paddingTop:8, paddingBottom:4,}}>{val}</ListItemText>
                 </MenuItem>
-                <Divider />
+                <Divider style={{margin:0}} />
                 </>)}
               </MenuList>
     </Grid>
@@ -226,8 +228,8 @@ const Typography = () => {
     </TableContainer>) : (menuListType && menuListType.length === 0) &&
         <Grid container direction="column" spacing={1}>
         <Grid item display={{display:"flex", flexDirection: "row", justifyContent: "space-around"}}>
-          <MuiTypography variant="subtitle3" gutterBottom>
-           No Menu Items Avaible
+          <MuiTypography variant="h5" gutterBottom sx={{paddingTop: 10}}>
+           No Menu Items Available
           </MuiTypography>   
           </Grid>
         </Grid>}
