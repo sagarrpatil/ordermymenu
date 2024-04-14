@@ -197,9 +197,9 @@ const Typography = () => {
                 </>)}
               </MenuList>
     </Grid>
-      <Grid item xs={9} sm={9}  sx={{position: "static", padding:0}}>
+      <Grid item xs={9} sm={9}  sx={{position: "static"}} style={{padding: 0, paddingLeft:24}}>
       {(menuListType && menuListType.length >0) ? (
-      <TableContainer component={Paper} sx={{padding: "inherit"}}>
+      <TableContainer  sx={{padding: "inherit"}}>
       <Table aria-label="simple table"  sx={{padding:0}}>
         <TableHead>
           <TableRow>
