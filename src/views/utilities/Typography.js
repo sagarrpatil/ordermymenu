@@ -181,26 +181,30 @@ const Typography = () => {
     </div>
   }>
     <Grid container spacing={gridSpacing}>
-    <Grid item xs={3} sm={3} sx={{position: "relative"}}>
-            <Button variant="outlined" onClick={() => setMenuOpen(true)}>Add Menu Type</Button>
-            <MenuList dense>
+    <Grid item xs={3} sm={3} sx={{position: "relative",zIndex:100}}>
+              <Button variant="outlined" style={{padding:5, fontSize:10}} onClick={() => setMenuOpen(true)}>Add Menu Type</Button>
+            <MenuList dense sx={{width:105}}>
             <Divider style={{margin:0}}/>
               {TypeOfProducts && TypeOfProducts.map(val =>  <>
-                <MenuItem style={{backgroundColor: (sectionSelected === val)  ? "tomato" : "#fff"}} onClick={() => selectMenuList(val, menuList)}>
-                  <ListItemText style={{paddingTop:8, paddingBottom:4,}}>{val}</ListItemText>
+                <MenuItem style={{backgroundColor: (sectionSelected === val)  ? "tomato" : "#fff", padding: 26}} onClick={() => selectMenuList(val, menuList)}>
+                  <ListItemText style={{paddingTop:8, paddingBottom:4,}}>
+                    <span style={{fontSize:18,}}>
+                    {val}
+                    </span>
+                    </ListItemText>
                 </MenuItem>
                 <Divider style={{margin:0}} />
                 </>)}
               </MenuList>
     </Grid>
-      <Grid item xs={9} sm={9}  sx={{position: "relative"}}>
+      <Grid item xs={9} sm={9}  sx={{position: "static", padding:0}}>
       {(menuListType && menuListType.length >0) ? (
-      <TableContainer component={Paper}>
-      <Table aria-label="simple table">
+      <TableContainer component={Paper} sx={{padding: "inherit"}}>
+      <Table aria-label="simple table"  sx={{padding:0}}>
         <TableHead>
           <TableRow>
           <TableCell>Product Name</TableCell>
-            <TableCell>Product Type</TableCell>
+            {/* <TableCell>Product Type</TableCell> */}
             <TableCell align="center">Price</TableCell>
             <TableCell align="center">Update</TableCell>
             <TableCell align="center">Delete</TableCell>
@@ -215,7 +219,7 @@ const Typography = () => {
               <TableCell component="th" scope="row">
                 {val.productName}
               </TableCell>
-              <TableCell>{val.productType}</TableCell>
+              {/* <TableCell>{val.productType}</TableCell> */}
               <TableCell align="center">₹ {val.productPrice}</TableCell>
               <TableCell align="center"><Button variant="contained" color='warning' onClick={() => setObj(val)}>Update</Button></TableCell>
               <TableCell align="center">
