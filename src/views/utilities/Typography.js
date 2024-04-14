@@ -20,6 +20,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Divider from '@mui/material/Divider';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Check from '@mui/icons-material/Check';
 
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc } from '@firebase/firestore';
 import { db } from '../../firebase';
@@ -34,6 +40,7 @@ const Typography = () => {
   const [productType, setProductType] = React.useState("");
   const [productName, setProductName] = React.useState("");
   const [productPrice, setProductPrice] = React.useState("");
+  const [menuListType, setMenuListType] = React.useState("");
   const [err, setError] = React.useState(null);
   const data = JSON.parse(atob(localStorage.getItem("token")));
   const [menuList, setMenuList] = React.useState(null);
@@ -66,7 +73,9 @@ const Typography = () => {
       querySnapshot.forEach((doc) => {
         items.push(doc.data().type);
       });
-      setTypeOfProducts([...new Set(items)])
+      let val = [...new Set(items)];
+      setTypeOfProducts(val);
+      selectMenuList(val[0]);
       console.log(TypeOfProducts);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -160,18 +169,32 @@ const Typography = () => {
       setError("Please check all the Fields")
     }
   }
+  const selectMenuList = (val) =>{
+    setMenuListType(menuList.filter(x => x.productType === val))
+  }
 
   return (<MainCard title="Menu Management" secondary={
     <div >
-    <Button variant="outlined" onClick={() => setMenuOpen(true)}>New Menu Type</Button> <Button variant="outlined" onClick={() => handleClickOpen()}>Add Menu Items</Button>
+      <Button variant="outlined" onClick={() => handleClickOpen()}>Add Menu Items</Button>
     </div>
   }>
     <Grid container spacing={gridSpacing}>
-     
-      <Grid item xs={12} sm={12}>
-      {(menuList && menuList.length >0) ? (
+    <Grid item xs={3} sm={3} sx={{position: "relative"}}>
+            <Button variant="outlined" onClick={() => setMenuOpen(true)}>Add Menu Type</Button>
+            <MenuList dense>
+            <Divider />
+              {TypeOfProducts && TypeOfProducts.map(val =>  <>
+                <MenuItem onClick={() => selectMenuList(val)}>
+                  <ListItemText>{val}</ListItemText>
+                </MenuItem>
+                <Divider />
+                </>)}
+              </MenuList>
+    </Grid>
+      <Grid item xs={9} sm={9}  sx={{position: "relative"}}>
+      {(menuListType && menuListType.length >0) ? (
       <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
           <TableCell>Product Name</TableCell>
@@ -182,7 +205,7 @@ const Typography = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-       {(menuList.map((val) => 
+       {(menuListType.map((val) => 
             <TableRow
               key={val.productName}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -200,7 +223,7 @@ const Typography = () => {
           ))}
         </TableBody>
       </Table>
-    </TableContainer>) : (menuList && menuList.length === 0) &&
+    </TableContainer>) : (menuListType && menuListType.length === 0) &&
         <Grid container direction="column" spacing={1}>
         <Grid item display={{display:"flex", flexDirection: "row", justifyContent: "space-around"}}>
           <MuiTypography variant="subtitle3" gutterBottom>
