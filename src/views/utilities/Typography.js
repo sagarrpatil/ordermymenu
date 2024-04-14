@@ -257,7 +257,7 @@ const Typography = () => {
           <br/>
           
           <DialogContentText id="alert-dialog-description">
-            <TextField   value={menuType} onChange={(e) => setMenuType(e.target.value)} placeholder='Menu Type' sx={{ width: 300 }}/> <br/><br/>
+            <TextField   value={menuType} onChange={(e) => setMenuType(e.target.value)} placeholder='Menu Type' /> <br/><br/>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -289,12 +289,12 @@ const Typography = () => {
               onChange={(event, newValue) => onChangeProductName(event, newValue)}
               id="combo-box-demo"
               options={TypeOfProducts}
-              sx={{ width: 300 }}
+              sx={{ width: 250 }}
               renderInput={(params) => <TextField {...params} label="Product Type" />}
             /><br/>
           <DialogContentText id="alert-dialog-description">
-            <TextField   value={productName} onChange={(e) => setProductName(e.target.value)} placeholder='Product Name' sx={{ width: 300 }}/> <br/><br/>
-            <TextField   value={productPrice} onChange={(e) => setProductPrice(e.target.value)} placeholder='Product Price' type='number' sx={{ width: 300 }}/> <br/><br/>
+            <TextField   value={productName} onChange={(e) => setProductName(e.target.value)} placeholder='Product Name'  sx={{ width: 250 }}/> <br/><br/>
+            <TextField   value={productPrice} onChange={(e) => setProductPrice(e.target.value)} placeholder='Product Price' type='number'  sx={{ width: 250 }}/> <br/><br/>
           
           </DialogContentText>
         </DialogContent>
