@@ -62,7 +62,7 @@ const Typography = () => {
       });
       setMenuList(items);
       fetchDataType(items);
-      console.log(items);
+      // console.log(items);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -81,7 +81,7 @@ const Typography = () => {
       localStorage.setItem("TOP", btoa(JSON.stringify(val)))
       setSectionSelected(val[0]);
       selectMenuList(val[0], menulistdata);
-      console.log(TypeOfProducts);
+      // console.log(TypeOfProducts);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -127,7 +127,7 @@ const Typography = () => {
     }
   }
   const handleSubmitMenuType = async () =>{
-    console.log(menuType)
+    // console.log(menuType)
     if(menuType !== "")
     try {
       const userDocRef = doc(db, data.user.email, 'MenuOrganization'); // Replace with your collection name
@@ -175,8 +175,9 @@ const Typography = () => {
   }
   const selectMenuList = (val, menulistdata) =>{
     setSectionSelected(val)
-    setMenuListType(menulistdata.filter(x => x.productType === val));
-    localStorage.setItem("TMLT", btoa(JSON.stringify(menulistdata.filter(x => x.productType === val))))
+    let menuData = menulistdata  && menulistdata.filter(x => x.productType === val);
+    setMenuListType(menuData);
+    localStorage.setItem("TMLT", btoa(JSON.stringify(menuData)))
   }
 
   return (<MainCard title="Menu Management" secondary={
