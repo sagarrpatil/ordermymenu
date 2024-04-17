@@ -9,6 +9,7 @@
     "@emotion/styled": "^11.11.0",
     "@firebase/app": "^0.10.0",
     "@firebase/auth": "^0.19.12",
+    "@firebase/database": "^1.0.4",
     "@firebase/firestore": "^4.5.1",
     "@mui/icons-material": "^5.15.7",
     "@mui/lab": "^5.0.0-alpha.163",
