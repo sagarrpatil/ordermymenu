@@ -124,7 +124,7 @@ const UtilitiesShadow = () => {
         
            {section.sort((a, b) => a.counterNumber - b.counterNumber).map((val) => 
               <Grid item xs={12} sm={6} md={4} lg={3} >
-                <ShadowBox counterSection={val.counterSection} shadow={val.counterNumber} onClick={() =>navigate("/utils/CounterMenu/"+val.id)}/>
+                <ShadowBox counterSection={val.counterSection} shadow={val.counterNumber} onClick={() =>navigate("/utils/CounterMenu/"+val.id+"/"+val.counterNumber+"/"+val.counterSection)}/>
               </Grid>)}
         
           </Grid>

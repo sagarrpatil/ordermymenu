@@ -49,7 +49,7 @@ const MainRoutes = {
       path: 'utils',
       children: [
         {
-          path: 'CounterMenu/:id',
+          path: 'CounterMenu/:id/:table/:section',
           element: <CounterMenu />
         }
       ]
