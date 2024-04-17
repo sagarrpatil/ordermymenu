@@ -34,7 +34,7 @@ const utilities = {
     // },
     {
       id: 'Counter',
-      title: 'Counter',
+      title: 'Counter & Bills',
       type: 'item',
       url: '/utils/Counter',
       icon: icons.IconShadow,
