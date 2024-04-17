@@ -52,7 +52,7 @@ const CounterMenu = () => {
       menu.push({ ...newValue, quantity: 1 });
     }
     setMenuStack(menu);
-    setProductName(null);
+    setProductName("");
     }
   };
   
@@ -92,7 +92,7 @@ const CounterMenu = () => {
             <Grid item xs={12} sm={6} md={4} lg={2}>
             <Autocomplete
               disablePortal
-              value={productName?.productName}
+              inputValue={productName?.productName}
               onChange={(event, newValue) => onChangeProductName(event, newValue)}
               id="combo-box-demo"
               options={menuList}
