@@ -58,7 +58,7 @@ const MainRoutes = {
       path: 'utils',
       children: [
         {
-          path: 'util-shadow',
+          path: 'Counter',
           element: <UtilsShadow />
         }
       ]

@@ -35,7 +35,7 @@ ShadowBox.propTypes = {
 // ============================|| UTILITIES SHADOW ||============================ //
 
 const UtilitiesShadow = () => (
-  <MainCard title="Basic Shadow" secondary={<SecondaryAction link="https:// -ui.com/system/shadows/" />}>
+  <MainCard title="Counter" secondary={<SecondaryAction link="" />}>
     <Grid container spacing={gridSpacing}>
       <Grid item xs={12}>
         <SubCard title="Basic Shadow">
