@@ -35,17 +35,19 @@ import { db } from '../../firebase';
 const Typography = () => {
   const [open, setOpen] = React.useState(false);
   const [menuType, setMenuType] = React.useState("");
-  const [TypeOfProducts, setTypeOfProducts] = React.useState(null);
+  let TOP = localStorage.getItem("TOP") ? JSON.parse(atob(localStorage.getItem("TOP"))) :null;
+  const [TypeOfProducts, setTypeOfProducts] = React.useState(TOP);
   const [menuopen, setMenuOpen] = React.useState("");
   const [productType, setProductType] = React.useState("");
   const [productName, setProductName] = React.useState("");
   const [productPrice, setProductPrice] = React.useState("");
-  const [menuListType, setMenuListType] = React.useState("");
+  let TMLT = localStorage.getItem("TMLT") ? JSON.parse(atob(localStorage.getItem("TMLT"))) :null;
+  const [menuListType, setMenuListType] = React.useState(TMLT);
   const [err, setError] = React.useState(null);
   const data = JSON.parse(atob(localStorage.getItem("token")));
   const [menuList, setMenuList] = React.useState(null);
   const [obj, setObj] = React.useState(null);
-  const [sectionSelected, setSectionSelected] = React.useState(null);
+  const [sectionSelected, setSectionSelected] = React.useState(TOP? TOP[0]:null);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -76,6 +78,7 @@ const Typography = () => {
       });
       let val = [...new Set(items)];
       setTypeOfProducts(val);
+      localStorage.setItem("TOP", btoa(JSON.stringify(val)))
       setSectionSelected(val[0]);
       selectMenuList(val[0], menulistdata);
       console.log(TypeOfProducts);
@@ -172,7 +175,8 @@ const Typography = () => {
   }
   const selectMenuList = (val, menulistdata) =>{
     setSectionSelected(val)
-    setMenuListType(menulistdata.filter(x => x.productType === val))
+    setMenuListType(menulistdata.filter(x => x.productType === val));
+    localStorage.setItem("TMLT", btoa(JSON.stringify(menulistdata.filter(x => x.productType === val))))
   }
 
   return (<MainCard title="Menu Management" secondary={
