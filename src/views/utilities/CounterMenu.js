@@ -12,10 +12,18 @@ import { realtimeDb, db } from '../../firebase';
 import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc } from '@firebase/firestore';
 import { getDatabase, ref, onValue, once } from '@firebase/database';
 import { height } from '@mui/system';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 const CounterMenu = () => {
   const { id, table, section } = useParams();
+  const [dense, setDense] = React.useState(false);
   let itemtoken = localStorage.getItem("itemtoken") ? JSON.parse(atob(localStorage.getItem("itemtoken"))) :null;
   const [menuList, setMenuList] = React.useState(itemtoken);
   const data = JSON.parse(atob(localStorage.getItem("token")));
@@ -35,7 +43,7 @@ const CounterMenu = () => {
   // };
 
   const onChangeProductName = (e, newValue) => {
-    let menu = menuStack;
+    let menu = [...menuStack];
     if(newValue){
     const existingItemIndex = menu.findIndex(item => item.id === newValue.id);
     if (existingItemIndex > -1) {
@@ -44,7 +52,6 @@ const CounterMenu = () => {
       menu.push({ ...newValue, quantity: 1 });
     }
     setMenuStack(menu);
-    console.log(menu);
     setProductName(null);
     }
   };
@@ -69,6 +76,10 @@ const CounterMenu = () => {
     fetchData();
     // getAllData();
   }, []);
+  const removeProductfromMenu = (id) =>{
+    const removedMenu = menuStack.filter(item => item.id !== id);
+    setMenuStack(removedMenu)
+  }
   return (<MainCard title={"Order & Bill"} secondary={
     <Button variant="outlined" onClick={() => {}}>Bill View</Button>
   }>
@@ -77,7 +88,7 @@ const CounterMenu = () => {
         <Typography>{"Table Number: " + table +` (${section})`}</Typography>
         <br/>
         {/* <SubCard title={"Table Number: " + table +` (${section})`} sx={{height:"80vh"}}> */}
-          <Grid container spacing={1}  sx={{height:"80vh"}}>
+          <Grid container spacing={1}>
             <Grid item xs={12} sm={6} md={4} lg={2}>
             <Autocomplete
               disablePortal
@@ -95,6 +106,29 @@ const CounterMenu = () => {
               )}
             />
             </Grid>     
+            <Grid item xs={12} sm={6} md={4} lg={2}>
+            <List dense={dense} sx={{width: "100%"}}>
+           
+             {menuStack.length> 0 && menuStack.map((val) =>  
+                <ListItem
+                key={val.id}
+                  secondaryAction={
+                    <IconButton edge="end" aria-label="delete" onClick={() => removeProductfromMenu(val.id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  }
+                >
+                 
+                  <ListItemText
+                    primary={val.productName}
+                    secondary={"₹ " + val.productPrice}
+                  />
+                   <ListItemAvatar>
+                      <p>{val.quantity}</p>
+                  </ListItemAvatar>
+                </ListItem>)}
+            </List>
+            </Grid>
           </Grid>
         {/* </SubCard> */}
       </Grid>
