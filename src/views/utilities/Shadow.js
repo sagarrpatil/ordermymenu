@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
-// material-ui
+import { useNavigate } from 'react-router-dom';
 import { Box, Button, Card, Grid, TextField } from '@mui/material';
 import MuiTypography from '@mui/material/Typography';
 import SubCard from 'ui-component/cards/SubCard';
@@ -16,8 +16,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 // ===============================|| SHADOW BOX ||=============================== //
 
-const ShadowBox = ({ shadow, counterSection }) => (
-  <Card sx={{ mb: 3, boxShadow: shadow }}>
+const ShadowBox = ({ shadow, counterSection, onClick }) => (
+  <Card sx={{ mb: 3, boxShadow: shadow }} onClick={(e) => onClick(e)}>
     <Box
       sx={{
         display: 'flex',
@@ -46,6 +46,7 @@ const UtilitiesShadow = () => {
   const [counterNumber, setCounterNumber] = React.useState("");
   const data = JSON.parse(atob(localStorage.getItem("token")));
   const [counterList, setCounterList] = React.useState(null);
+  const navigate = useNavigate();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -122,8 +123,8 @@ const UtilitiesShadow = () => {
           <Grid container spacing={gridSpacing}>
         
            {section.sort((a, b) => a.counterNumber - b.counterNumber).map((val) => 
-              <Grid item xs={12} sm={6} md={4} lg={3}>
-                <ShadowBox counterSection={val.counterSection} shadow={val.counterNumber} />
+              <Grid item xs={12} sm={6} md={4} lg={3} >
+                <ShadowBox counterSection={val.counterSection} shadow={val.counterNumber} onClick={() =>navigate("/utils/CounterMenu/"+val.id)}/>
               </Grid>)}
         
           </Grid>
