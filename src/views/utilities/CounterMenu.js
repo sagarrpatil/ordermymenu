@@ -1,46 +1,102 @@
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
-import { Box, Card, Grid, Typography, Button } from '@mui/material';
-
+import { Box, TextField, Grid, Button, Typography } from '@mui/material';
+import React from 'react';
 // project imports
+import Autocomplete from '@mui/material/Autocomplete';
 import SubCard from 'ui-component/cards/SubCard';
 import MainCard from 'ui-component/cards/MainCard';
-import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
 import { gridSpacing } from 'store/constant';
 import { useEffect } from 'react';
-import { realtimeDb } from '../../firebase';
+import { realtimeDb, db } from '../../firebase';
+import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc } from '@firebase/firestore';
 import { getDatabase, ref, onValue, once } from '@firebase/database';
+import { height } from '@mui/system';
 
 
 const CounterMenu = () => {
   const { id, table, section } = useParams();
-  const getAllData = async () => {
+  let itemtoken = localStorage.getItem("itemtoken") ? JSON.parse(atob(localStorage.getItem("itemtoken"))) :null;
+  const [menuList, setMenuList] = React.useState(itemtoken);
+  const data = JSON.parse(atob(localStorage.getItem("token")));
+  const [productName, setProductName] = React.useState(null);
+  const [menuStack, setMenuStack] = React.useState([]);
+  // const getAllData = async () => {
+  //   try {
+  //     const dataRef = ref(realtimeDb);
+  //     const unsubscribe = onValue(dataRef, (snapshot) => {
+  //       const data = snapshot.val();
+  //       console.log(data);
+  //       unsubscribe();
+  //     });
+  //   } catch (error) {
+  //     console.error("Error retrieving data:", error);
+  //   }
+  // };
+
+  const onChangeProductName = (e, newValue) => {
+    let menu = menuStack;
+    if(newValue){
+    const existingItemIndex = menu.findIndex(item => item.id === newValue.id);
+    if (existingItemIndex > -1) {
+      menu[existingItemIndex].quantity += 1;
+    } else {
+      menu.push({ ...newValue, quantity: 1 });
+    }
+    setMenuStack(menu);
+    console.log(menu);
+    setProductName(null);
+    }
+  };
+  
+  const fetchData = async () => {
     try {
-      const dataRef = ref(realtimeDb);
-      const unsubscribe = onValue(dataRef, (snapshot) => {
-        const data = snapshot.val();
-        console.log(data);
-        unsubscribe();
+      const userDocRef = doc(db, data.user.email, 'MenuOrganization'); 
+      const menuItemsCollectionRef = collection(userDocRef, 'MenuItems');
+      const querySnapshot = await getDocs(menuItemsCollectionRef);
+      const items = [];
+      querySnapshot.forEach((doc) => {
+        items.push({ id: doc.id, ...doc.data() });
       });
+      setMenuList(items);
+      localStorage.setItem("itemtoken", btoa(JSON.stringify(items)))
+      // console.log(items);
     } catch (error) {
-      console.error("Error retrieving data:", error);
+      console.error("Error fetching data:", error);
     }
   };
   useEffect(() => {
-    getAllData();
+    fetchData();
+    // getAllData();
   }, []);
-  return (<MainCard title={"Table Number: " + table +` (${section})`} secondary={
+  return (<MainCard title={"Order & Bill"} secondary={
     <Button variant="outlined" onClick={() => {}}>Bill View</Button>
   }>
-    <Grid container spacing={gridSpacing}>
+    <Grid container spacing={1}>
       <Grid item xs={12}>
-        <SubCard title="Order's">
-          <Grid container spacing={gridSpacing}>
+        <Typography>{"Table Number: " + table +` (${section})`}</Typography>
+        <br/>
+        {/* <SubCard title={"Table Number: " + table +` (${section})`} sx={{height:"80vh"}}> */}
+          <Grid container spacing={1}  sx={{height:"80vh"}}>
             <Grid item xs={12} sm={6} md={4} lg={2}>
-
+            <Autocomplete
+              disablePortal
+              value={productName?.productName}
+              onChange={(event, newValue) => onChangeProductName(event, newValue)}
+              id="combo-box-demo"
+              options={menuList}
+              getOptionLabel={(option) => option.productName}
+              sx={{ width: "100%",fontSize: 20}}
+              renderInput={(params) => <TextField variant="filled"  {...params} label="Product Name" />}
+              renderOption={(props, option) => (
+                <Box component="li" sx={{height:50, background: "#e3e3e3",fontSize: 20  }} {...props}>
+                  {option.productName}  (₹ {option.productPrice})
+                </Box>
+              )}
+            />
             </Grid>     
           </Grid>
-        </SubCard>
+        {/* </SubCard> */}
       </Grid>
    
     </Grid>
