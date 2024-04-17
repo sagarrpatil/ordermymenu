@@ -45,7 +45,8 @@ const UtilitiesShadow = () => {
   const [counterSection, setCounterSection] = React.useState("");
   const [counterNumber, setCounterNumber] = React.useState("");
   const data = JSON.parse(atob(localStorage.getItem("token")));
-  const [counterList, setCounterList] = React.useState(null);
+  let counter = localStorage.getItem("dataTab") ? atob(localStorage.getItem("dataTab")) :null;
+  const [counterList, setCounterList] = React.useState(JSON.parse(counter));
   const navigate = useNavigate();
   const handleClickOpen = () => {
     setOpen(true);
@@ -75,7 +76,7 @@ const UtilitiesShadow = () => {
       
       const result = Object.values(groupedByCounterSection).map(sectionArray => sectionArray.sort((a, b) => a.counterSection.localeCompare(b.counterSection)));
       setCounterList(result);
-    
+      localStorage.setItem("dataTab", btoa(JSON.stringify(result)))
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -92,7 +93,7 @@ const UtilitiesShadow = () => {
   const handleSubmit = async () =>{
     if(counterSection !== "" && counterNumber !== ""){
       let newObject = {
-        counterSection: counterSection.toUpperCase(),
+        counterSection: counterSection.toUpperCase().trim(),
         counterNumber: Number(counterNumber),
         active: true,
       }
