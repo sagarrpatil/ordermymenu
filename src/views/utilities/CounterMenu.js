@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
-import { Box, TextField, Grid, Button, Typography } from '@mui/material';
+import { Box, TextField, Grid, Button, Typography, Fab } from '@mui/material';
 import React from 'react';
-// project imports
+import AddIcon from '@mui/icons-material/Add';
 import Autocomplete from '@mui/material/Autocomplete';
+import RemoveIcon from '@mui/icons-material/Remove';
 import SubCard from 'ui-component/cards/SubCard';
 import MainCard from 'ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
@@ -127,8 +128,16 @@ const CounterMenu = () => {
                     primary={val.productName}
                     secondary={"₹ " + val.productPrice}
                   />
-                   <ListItemAvatar>
-                      <p>{val.quantity}</p>
+                   <ListItemAvatar style={{display: "flex"}}>
+                   <Fab size="small" color="secondary" aria-label="add">
+                      <RemoveIcon />
+                    </Fab>
+                      <div style={{fontSize:18, width:40, alignContent:"center", justifyContent:"center", textAlign:'center'}}>
+                          {val.quantity}
+                      </div>
+                      <Fab size="small" color="secondary" aria-label="add">
+                      <AddIcon />
+                      </Fab>
                   </ListItemAvatar>
                 </ListItem>)}
             </List>
