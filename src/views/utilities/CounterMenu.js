@@ -43,19 +43,20 @@ const CounterMenu = () => {
   // };
 
   const onChangeProductName = (e, newValue) => {
-    let menu = [...menuStack];
-    if(newValue){
-    const existingItemIndex = menu.findIndex(item => item.id === newValue.id);
-    if (existingItemIndex > -1) {
-      menu[existingItemIndex].quantity += 1;
-    } else {
-      menu.push({ ...newValue, quantity: 1 });
-    }
-    setMenuStack(menu);
-    setProductName("");
+    if (newValue) {
+      const existingItemIndex = menuStack.findIndex(item => item.id === newValue.id);
+      if (existingItemIndex > -1) {
+        const updatedMenuStack = [...menuStack];
+        updatedMenuStack[existingItemIndex].quantity += 1;
+        setMenuStack(updatedMenuStack);
+      } else {
+        setMenuStack((prevMenuStack) => [...prevMenuStack, { ...newValue, quantity: 1 }]);
+      }
+      setProductName('');
+      e.target.value = "";
     }
   };
-  
+  console.log(menuList, menuStack)
   const fetchData = async () => {
     try {
       const userDocRef = doc(db, data.user.email, 'MenuOrganization'); 
@@ -92,10 +93,13 @@ const CounterMenu = () => {
             <Grid item xs={12} sm={6} md={4} lg={2}>
             <Autocomplete
               disablePortal
-              inputValue={productName?.productName}
+              value={productName?.productName}
               onChange={(event, newValue) => onChangeProductName(event, newValue)}
               id="combo-box-demo"
-              options={menuList}
+              options={menuList.filter(item => {
+                return !menuStack.some(removeItem => removeItem.id === item.id);
+              })}
+              onClose={() => setProductName('')}
               getOptionLabel={(option) => option.productName}
               sx={{ width: "100%",fontSize: 20}}
               renderInput={(params) => <TextField variant="filled"  {...params} label="Product Name" />}
@@ -106,7 +110,7 @@ const CounterMenu = () => {
               )}
             />
             </Grid>     
-            <Grid item xs={12} sm={6} md={4} lg={2}>
+            <Grid item xs={12} sm={6} md={5} lg={5}>
             <List dense={dense} sx={{width: "100%"}}>
            
              {menuStack.length> 0 && menuStack.map((val) =>  
