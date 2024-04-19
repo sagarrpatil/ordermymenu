@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   TextField,
@@ -42,6 +43,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import moment from "moment";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 
 const CounterMenu = () => {
   const { id, table, section } = useParams();
@@ -55,6 +59,13 @@ const CounterMenu = () => {
   const [menuStack, setMenuStack] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [err, setError] = React.useState(null);
+
+  const navigate = useNavigate();
+
+  const [upi, seUpi] = React.useState(null);
+  const [cash, setCash] = React.useState(null);
+  const [card, setCard] = React.useState(null);
+
   const now = new Date();
   const currentTime = Math.floor(now.getTime() / 1000);
 
@@ -162,7 +173,29 @@ const CounterMenu = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleSubmit = async () => {};
+  const handleSubmit = async () => {
+    let newObject = {
+      menuStack: menuStack,
+      transaction: "UPI",
+    };
+    try {
+      const userDocRef = doc(db, data.user.email, "transaction"); // Replace with your collection name
+      const menuItemsCollectionRef = collection(
+        userDocRef,
+        currentTime.toString(),
+      );
+      await addDoc(menuItemsCollectionRef, newObject);
+      const dataRef = ref(
+        realtimeDb,
+        `orders/${data.user.email.replace("@", "").replace(".", "")}/${id}`,
+      );
+      await set(dataRef, null);
+      navigate("/utils/Counter");
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   return (
     <MainCard
       title={"Order & Bill"}
@@ -314,7 +347,22 @@ const CounterMenu = () => {
           )}
 
           <DialogContentText id="alert-dialog-description">
-            {/* <span style={{fontSize:16, color: "#000", fontWeight:"bold" }}>Total: </span> */}
+            <Grid
+              container
+              spacing={1}
+              style={{ paddingTop: 10, background: "#fff" }}
+            >
+              <Grid item xs={12}>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox checked={upi} defaultChecked />}
+                    label="UPI"
+                  />
+                  <FormControlLabel control={<Checkbox />} label="Cash" />
+                  <FormControlLabel control={<Checkbox />} label="Card" />
+                </FormGroup>
+              </Grid>
+            </Grid>
 
             <div class="container">
               <div class="receipt_header">

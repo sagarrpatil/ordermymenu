@@ -191,7 +191,7 @@ const UtilitiesShadow = () => {
                     .map((val) => (
                       <Grid item xs={12} sm={6} md={4} lg={3}>
                         <ShadowBox
-                          tableFilled={tableFilled[val.id]}
+                          tableFilled={tableFilled ? tableFilled[val.id] : null}
                           counterSection={val.counterSection}
                           shadow={val.counterNumber}
                           onClick={() =>
