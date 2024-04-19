@@ -67,7 +67,7 @@ const UtilitiesShadow = () => {
 
   const getAllTableData = async () => {
     try {
-      const dataRef = ref(realtimeDb, "orders");
+      const dataRef = ref(realtimeDb, `orders/${data.user.email.replace("@","").replace(".","")}`);
       const unsubscribe = onValue(dataRef, (snapshot) => {
         const data = snapshot.val();
         console.log(data);

@@ -36,7 +36,7 @@ const CounterMenu = () => {
 
   const getAllData = async () => {
     try {
-      const dataRef = ref(realtimeDb, `orders/${id}`);
+      const dataRef = ref(realtimeDb, `orders/${data.user.email.replace("@","").replace(".","")}/${id}`);
       const unsubscribe = onValue(dataRef, (snapshot) => {
         const data = snapshot.val();
         if(data)
@@ -107,7 +107,7 @@ const CounterMenu = () => {
         const method = async () =>{
           try {
             let objData = [...menuStack];
-            const dataRef = ref(realtimeDb, `orders/${id}`);
+            const dataRef = ref(realtimeDb, `orders/${data.user.email.replace("@","").replace(".","")}/${id}`);
             unsubscribeFromOrderWrite = await set(dataRef, objData);
             console.log("Order data written successfully!");
           } catch (error) {
@@ -191,6 +191,13 @@ const CounterMenu = () => {
               <center>
                   <h3>Total Amount: {totalCost.toLocaleString('en-US', {minimumFractionDigits: 2,  maximumFractionDigits: 2})}</h3>
                   </center>
+              <Divider/>
+            </Grid>
+            <Grid item xs={12}>
+              <Divider/>
+              <center>
+                 <Button></Button>
+              </center>
               <Divider/>
             </Grid>
           </Grid>
