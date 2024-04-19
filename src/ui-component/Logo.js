@@ -1,6 +1,6 @@
 // material-ui
-import { useTheme } from '@mui/material/styles';
-import LogoH from '../assets/images/logoH.png'
+import { useTheme } from "@mui/material/styles";
+import LogoH from "../assets/images/logoH.png";
 /**
  * if you want to use image instead of <svg> uncomment following.
  *
@@ -21,7 +21,7 @@ const Logo = () => {
      * <img src={logo} alt="Order My Menu" width="100" />
      *
      */
-    <img src={LogoH} width={"150px"}/>
+    <img src={LogoH} width={"150px"} />
   );
 };
 

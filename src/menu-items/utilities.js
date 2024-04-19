@@ -1,28 +1,33 @@
 // assets
-import { IconTypography, IconPalette, IconShadow, IconWindmill } from '@tabler/icons-react';
+import {
+  IconTypography,
+  IconPalette,
+  IconShadow,
+  IconWindmill,
+} from "@tabler/icons-react";
 
 // constant
 const icons = {
   IconTypography,
   IconPalette,
   IconShadow,
-  IconWindmill
+  IconWindmill,
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
 
 const utilities = {
-  id: 'utilities',
-  title: 'Menu Management',
-  type: 'group',
+  id: "utilities",
+  title: "Menu Management",
+  type: "group",
   children: [
     {
-      id: 'util-typography',
-      title: 'Menu Management',
-      type: 'item',
-      url: '/utils/menu',
+      id: "util-typography",
+      title: "Menu Management",
+      type: "item",
+      url: "/utils/menu",
       icon: icons.IconPalette,
-      breadcrumbs: false
+      breadcrumbs: false,
     },
     // {
     //   id: 'util-color',
@@ -33,12 +38,12 @@ const utilities = {
     //   breadcrumbs: false
     // },
     {
-      id: 'Counter',
-      title: 'Counter & Bills',
-      type: 'item',
-      url: '/utils/Counter',
+      id: "Counter",
+      title: "Counter & Bills",
+      type: "item",
+      url: "/utils/Counter",
       icon: icons.IconShadow,
-      breadcrumbs: false
+      breadcrumbs: false,
     },
     // {
     //   id: 'icons',
@@ -64,7 +69,7 @@ const utilities = {
     //     }
     //   ]
     // }
-  ]
+  ],
 };
 
 export default utilities;

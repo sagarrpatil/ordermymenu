@@ -1,21 +1,31 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+import PropTypes from "prop-types";
+import { useState } from "react";
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
-import { Avatar, Button, CardActions, CardContent, Divider, Grid, Menu, MenuItem, Typography } from '@mui/material';
+import { useTheme } from "@mui/material/styles";
+import {
+  Avatar,
+  Button,
+  CardActions,
+  CardContent,
+  Divider,
+  Grid,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 
 // project imports
-import BajajAreaChartCard from './BajajAreaChartCard';
-import MainCard from 'ui-component/cards/MainCard';
-import SkeletonPopularCard from 'ui-component/cards/Skeleton/PopularCard';
-import { gridSpacing } from 'store/constant';
+import BajajAreaChartCard from "./BajajAreaChartCard";
+import MainCard from "ui-component/cards/MainCard";
+import SkeletonPopularCard from "ui-component/cards/Skeleton/PopularCard";
+import { gridSpacing } from "store/constant";
 
 // assets
-import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
-import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
-import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
-import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
+import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
+import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
+import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
+import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 
 // ==============================|| DASHBOARD DEFAULT - POPULAR CARD ||============================== //
 
@@ -303,7 +313,7 @@ const PopularCard = ({ isLoading }) => {
 };
 
 PopularCard.propTypes = {
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
 };
 
 export default PopularCard;

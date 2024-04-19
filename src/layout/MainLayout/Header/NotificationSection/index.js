@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
+import { useTheme } from "@mui/material/styles";
 import {
   Avatar,
   Box,
@@ -18,48 +18,48 @@ import {
   Stack,
   TextField,
   Typography,
-  useMediaQuery
-} from '@mui/material';
+  useMediaQuery,
+} from "@mui/material";
 
 // third-party
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
-import Transitions from 'ui-component/extended/Transitions';
-import NotificationList from './NotificationList';
+import MainCard from "ui-component/cards/MainCard";
+import Transitions from "ui-component/extended/Transitions";
+import NotificationList from "./NotificationList";
 
 // assets
-import { IconBell } from '@tabler/icons-react';
+import { IconBell } from "@tabler/icons-react";
 
 // notification status options
 const status = [
   {
-    value: 'all',
-    label: 'All Notification'
+    value: "all",
+    label: "All Notification",
   },
   {
-    value: 'new',
-    label: 'New'
+    value: "new",
+    label: "New",
   },
   {
-    value: 'unread',
-    label: 'Unread'
+    value: "unread",
+    label: "Unread",
   },
   {
-    value: 'other',
-    label: 'Other'
-  }
+    value: "other",
+    label: "Other",
+  },
 ];
 
 // ==============================|| NOTIFICATION ||============================== //
 
 const NotificationSection = () => {
   const theme = useTheme();
-  const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
+  const matchesXs = useMediaQuery(theme.breakpoints.down("md"));
 
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   /**
    * anchorRef is used on different componets and specifying one type leads to other components throwing an error
    * */
@@ -94,27 +94,27 @@ const NotificationSection = () => {
         sx={{
           ml: 2,
           mr: 3,
-          [theme.breakpoints.down('md')]: {
-            mr: 2
-          }
+          [theme.breakpoints.down("md")]: {
+            mr: 2,
+          },
         }}
       >
-        <ButtonBase sx={{ borderRadius: '12px' }}>
+        <ButtonBase sx={{ borderRadius: "12px" }}>
           <Avatar
             variant="rounded"
             sx={{
               ...theme.typography.commonAvatar,
               ...theme.typography.mediumAvatar,
-              transition: 'all .2s ease-in-out',
+              transition: "all .2s ease-in-out",
               background: theme.palette.secondary.light,
               color: theme.palette.secondary.dark,
               '&[aria-controls="menu-list-grow"],&:hover': {
                 background: theme.palette.secondary.dark,
-                color: theme.palette.secondary.light
-              }
+                color: theme.palette.secondary.light,
+              },
             }}
             ref={anchorRef}
-            aria-controls={open ? 'menu-list-grow' : undefined}
+            aria-controls={open ? "menu-list-grow" : undefined}
             aria-haspopup="true"
             onClick={handleToggle}
             color="inherit"
@@ -124,7 +124,7 @@ const NotificationSection = () => {
         </ButtonBase>
       </Box>
       <Popper
-        placement={matchesXs ? 'bottom' : 'bottom-end'}
+        placement={matchesXs ? "bottom" : "bottom-end"}
         open={open}
         anchorEl={anchorRef.current}
         role={undefined}
@@ -133,12 +133,12 @@ const NotificationSection = () => {
         popperOptions={{
           modifiers: [
             {
-              name: 'offset',
+              name: "offset",
               options: {
-                offset: [matchesXs ? 5 : 0, 20]
-              }
-            }
-          ]
+                offset: [matchesXs ? 5 : 0, 20],
+              },
+            },
+          ],
         }}
       >
         {/* {({ TransitionProps }) => (

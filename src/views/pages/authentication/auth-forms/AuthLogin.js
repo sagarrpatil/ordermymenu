@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
+import { useTheme } from "@mui/material/styles";
 import {
   Box,
   Button,
@@ -18,39 +18,47 @@ import {
   OutlinedInput,
   Stack,
   Typography,
-  useMediaQuery
-} from '@mui/material';
+  useMediaQuery,
+} from "@mui/material";
 
 // third party
-import * as Yup from 'yup';
-import { Formik } from 'formik';
+import * as Yup from "yup";
+import { Formik } from "formik";
 
 // project imports
-import { auth, provider } from '../../../../firebase';
+import { auth, provider } from "../../../../firebase";
 import { signInWithPopup } from "@firebase/auth";
-import useScriptRef from 'hooks/useScriptRef';
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import useScriptRef from "hooks/useScriptRef";
+import AnimateButton from "ui-component/extended/AnimateButton";
 
 // assets
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc } from '@firebase/firestore';
-import { db } from '../../../../firebase';
-import Google from 'assets/images/icons/social-google.svg';
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  doc,
+  updateDoc,
+  setDoc,
+} from "@firebase/firestore";
+import { db } from "../../../../firebase";
+import Google from "assets/images/icons/social-google.svg";
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const FirebaseLogin = ({ ...others }) => {
   const theme = useTheme();
   const scriptedRef = useScriptRef();
-  const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
+  const matchDownSM = useMediaQuery(theme.breakpoints.down("md"));
   const customization = useSelector((state) => state.customization);
   const [checked, setChecked] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const collectionRef = collection(db, 'yourCollectionName'); 
+        const collectionRef = collection(db, "yourCollectionName");
         const querySnapshot = await getDocs(collectionRef);
         const items = [];
         querySnapshot.forEach((doc) => {
@@ -61,24 +69,23 @@ const FirebaseLogin = ({ ...others }) => {
         console.error("Error fetching data:", error);
       }
     };
-  
+
     fetchData();
-  
   }, []);
 
   const googleHandler = async () => {
     signInWithPopup(auth, provider)
-    .then(async (result) => {
-      localStorage.setItem("token", btoa(JSON.stringify(result)));
+      .then(async (result) => {
+        localStorage.setItem("token", btoa(JSON.stringify(result)));
         try {
           const collectionRef = collection(db, result._tokenResponse.email); // Replace with your collection name
           const dataToCreate = result._tokenResponse;
-          let obj ={
-            displayName : dataToCreate.displayName,
+          let obj = {
+            displayName: dataToCreate.displayName,
             email: dataToCreate.email,
             photoUrl: dataToCreate.photoUrl,
-            localId: dataToCreate.localId
-          }
+            localId: dataToCreate.localId,
+          };
           const docRef = doc(collectionRef, result._tokenResponse.email);
           await setDoc(docRef, obj);
           window.location.href = "/";
@@ -86,11 +93,11 @@ const FirebaseLogin = ({ ...others }) => {
           console.error("Error creating data:", error);
           // Handle errors appropriately (e.g., display an error message to the user)
         }
-    })
-    .catch((error) => {
-      // Handle Errors here.
-      // ...
-    });
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        // ...
+      });
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -114,13 +121,19 @@ const FirebaseLogin = ({ ...others }) => {
               size="large"
               variant="outlined"
               sx={{
-                color: 'grey.700',
+                color: "grey.700",
                 backgroundColor: theme.palette.grey[50],
-                borderColor: theme.palette.grey[100]
+                borderColor: theme.palette.grey[100],
               }}
             >
               <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
-                <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} />
+                <img
+                  src={Google}
+                  alt="google"
+                  width={16}
+                  height={16}
+                  style={{ marginRight: matchDownSM ? 8 : 16 }}
+                />
               </Box>
               Sign in with Google
             </Button>
@@ -156,7 +169,7 @@ const FirebaseLogin = ({ ...others }) => {
             <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
           </Box>
         </Grid>*/}
-         {/*<Grid item xs={12} container alignItems="center" justifyContent="center">
+        {/*<Grid item xs={12} container alignItems="center" justifyContent="center">
           <Box sx={{ mb: 2 }}>
             <Typography variant="subtitle1">Sign in with Email address</Typography>
           </Box>
