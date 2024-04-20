@@ -257,7 +257,7 @@ const CounterMenu = () => {
     setValueOfTab(newValue);
   };
   const handleChangeSetValueTab = (event, newValue) => {
-    let value = menuList.find((x) => x.productName === event.target.innerText);
+    let value = menuList.find((x) => x.productName.toUpperCase().trim() === event.target.innerText.toUpperCase().trim());
     console.log("item", event.target.innerText, value);
     onChangeProductName(event, value);
   };
