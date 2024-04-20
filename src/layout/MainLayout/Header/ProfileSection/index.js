@@ -96,6 +96,24 @@ const ProfileSection = () => {
     prevOpen.current = open;
   }, [open]);
 
+  const shareOption = async () => {
+    try {
+      if (navigator.share) {
+        // Use Web Share API if available
+        await navigator.share({
+          title: "Order My Menu Access",
+          text: `https://ordermymenu.vercel.app/?token=${localStorage.getItem("token")}`,
+        });
+      } else {
+        window.open(
+          `whatsapp://send?text=https://ordermymenu.vercel.app/?token=${localStorage.getItem("token")}`,
+        );
+      }
+    } catch (error) {
+      console.error("Error sharing content:", error);
+    }
+  };
+
   return (
     <>
       <Chip
@@ -336,8 +354,11 @@ const ProfileSection = () => {
                                 justifyContent="space-between"
                               >
                                 <Grid item>
-                                  <Typography variant="body2">
-                                    Social Profile
+                                  <Typography
+                                    variant="body2"
+                                    onClick={() => shareOption()}
+                                  >
+                                    Share Access
                                   </Typography>
                                 </Grid>
                                 <Grid item>

@@ -257,7 +257,11 @@ const CounterMenu = () => {
     setValueOfTab(newValue);
   };
   const handleChangeSetValueTab = (event, newValue) => {
-    let value = menuList.find((x) => x.productName.toUpperCase().trim() === event.target.innerText.toUpperCase().trim());
+    let value = menuList.find(
+      (x) =>
+        x.productName.toUpperCase().trim() ===
+        event.target.innerText.toUpperCase().trim(),
+    );
     console.log("item", event.target.innerText, value);
     onChangeProductName(event, value);
   };
@@ -438,8 +442,10 @@ const CounterMenu = () => {
                           }}
                         >
                           {val.quantity}
-                          <br/>
-                          <span style={{color: "#757575", fontSize:14}}>{"₹" + Number(val.productPrice * val.quantity)}</span>
+                          <br />
+                          <span style={{ color: "#757575", fontSize: 14 }}>
+                            {"₹" + Number(val.productPrice * val.quantity)}
+                          </span>
                         </div>
                         <Fab
                           size="small"
