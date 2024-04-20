@@ -19,6 +19,7 @@ import MainCard from "ui-component/cards/MainCard";
 import { gridSpacing } from "store/constant";
 import { useEffect } from "react";
 import { realtimeDb, db } from "../../firebase";
+import CircularProgress from "@mui/material/CircularProgress";
 import {
   collection,
   getDocs,
@@ -59,12 +60,26 @@ const CounterMenu = () => {
   const [menuStack, setMenuStack] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [err, setError] = React.useState(null);
-
+  const [isLoading, setIsLoading] = React.useState(false);
   const navigate = useNavigate();
 
-  const [upi, seUpi] = React.useState(null);
-  const [cash, setCash] = React.useState(null);
-  const [card, setCard] = React.useState(null);
+  const [transactionMode, setTransactionMode] = React.useState([
+    {
+      label: "UPI",
+      checked: false,
+      value: null,
+    },
+    {
+      label: "CASH",
+      checked: false,
+      value: null,
+    },
+    {
+      label: "CARD",
+      checked: false,
+      value: null,
+    },
+  ]);
 
   const now = new Date();
   const currentTime = Math.floor(now.getTime() / 1000);
@@ -104,7 +119,6 @@ const CounterMenu = () => {
       e.target.value = "";
     }
   };
-  console.log(menuList, menuStack);
   const fetchData = async () => {
     try {
       const userDocRef = doc(db, data.user.email, "MenuOrganization");
@@ -174,9 +188,10 @@ const CounterMenu = () => {
     setOpen(false);
   };
   const handleSubmit = async () => {
+    setIsLoading(true);
     let newObject = {
       menuStack: menuStack,
-      transaction: "UPI",
+      transaction: transactionMode.filter((x) => x.value),
     };
     try {
       const userDocRef = doc(db, data.user.email, "transaction"); // Replace with your collection name
@@ -192,10 +207,37 @@ const CounterMenu = () => {
       await set(dataRef, null);
       navigate("/utils/Counter");
     } catch (error) {
+      setIsLoading(false);
       console.error("Error fetching data:", error);
     }
   };
-
+  const handleChange = (event, i) => {
+    let transaction = [...transactionMode];
+    transaction[i].checked = event.target.checked;
+    if (event.target.checked) transaction[i].value = totalCost;
+    else transaction[i].value = null;
+    setTransactionMode(transaction);
+  };
+  const handleInputChange = (event, i) => {
+    let transaction = [...transactionMode];
+    transaction[i].value = event.target.value;
+    setTransactionMode(transaction);
+  };
+  useEffect(() => {
+    let transactionAmountSelected = transactionMode.reduce(
+      (accumulator, product) => {
+        return accumulator + Number(product.value);
+      },
+      0,
+    );
+    if (transactionAmountSelected === totalCost) {
+      setError(null);
+    } else {
+      if (transactionMode.find((x) => x.checked === true))
+        setError("Amount Should be equal to Total Cost");
+      else setError("Please Select Any Mode of Payment");
+    }
+  }, [transactionMode, open]);
   return (
     <MainCard
       title={"Order & Bill"}
@@ -340,26 +382,53 @@ const CounterMenu = () => {
           Bill Payment
         </DialogTitle>
         <DialogContent style={{ background: "#e3e3e3" }}>
-          {err && (
-            <b style={{ color: "red" }}>
-              {err} * <br />
-            </b>
-          )}
-
           <DialogContentText id="alert-dialog-description">
+            <h3>Mode of Payment</h3>
+
             <Grid
               container
               spacing={1}
-              style={{ paddingTop: 10, background: "#fff" }}
+              style={{ paddingTop: 10, background: "#fff", paddingBottom: 10 }}
             >
+              {err && (
+                <Grid item xs={12}>
+                  <b style={{ color: "red" }}>
+                    {err} * <br />
+                  </b>
+                </Grid>
+              )}
+
               <Grid item xs={12}>
                 <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox checked={upi} defaultChecked />}
-                    label="UPI"
-                  />
-                  <FormControlLabel control={<Checkbox />} label="Cash" />
-                  <FormControlLabel control={<Checkbox />} label="Card" />
+                  {transactionMode.map((val, i) => (
+                    <Grid container>
+                      <Grid item xs={3}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={val.checked}
+                              defaultChecked
+                              onChange={(e) => handleChange(e, i)}
+                            />
+                          }
+                          label={val.label}
+                        />
+                      </Grid>
+                      <Grid item xs={8}>
+                        {val.checked && (
+                          <TextField
+                            fullWidth
+                            id="filled-basic"
+                            label={val.label + " Amount"}
+                            variant="filled"
+                            onChange={(e) => handleInputChange(e, i)}
+                            type="number"
+                            value={val.value}
+                          />
+                        )}
+                      </Grid>
+                    </Grid>
+                  ))}
                 </FormGroup>
               </Grid>
             </Grid>
@@ -376,8 +445,10 @@ const CounterMenu = () => {
 
               <div class="receipt_body">
                 <div class="date_time_con" style={{ padding: 10 }}>
-                  <div class="date">{moment().format("DD MMM YYYY")}</div>
-                  <div class="time">{moment().format("hh: mm: a")}</div>
+                  <div class="date">
+                    {moment().format("MMM DD, YYYY").toUpperCase()}
+                  </div>
+                  <div class="time">{moment().format("hh:mm A")}</div>
                 </div>
 
                 <div class="items">
@@ -435,8 +506,10 @@ const CounterMenu = () => {
             autoFocus
             color="success"
             variant="contained"
+            disabled={isLoading || err !== null}
+            endIcon={isLoading && <CircularProgress size="small" />}
           >
-            Save
+            {isLoading ? "Saving..." : "Save"}
           </Button>
           <Button
             onClick={handleSubmit}
