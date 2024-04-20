@@ -53,7 +53,7 @@ const CounterMenu = () => {
   const [dense, setDense] = React.useState(false);
   let itemtoken = localStorage.getItem("itemtoken")
     ? JSON.parse(atob(localStorage.getItem("itemtoken")))
-    : null;
+    : [];
   const [menuList, setMenuList] = React.useState(itemtoken);
   const data = JSON.parse(atob(localStorage.getItem("token")));
   const [productName, setProductName] = React.useState(null);

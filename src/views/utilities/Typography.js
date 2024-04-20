@@ -51,7 +51,7 @@ const Typography = () => {
   const [productPrice, setProductPrice] = React.useState("");
   let TMLT = localStorage.getItem("TMLT")
     ? JSON.parse(atob(localStorage.getItem("TMLT")))
-    : null;
+    : [];
   const [menuListType, setMenuListType] = React.useState(TMLT);
   const [err, setError] = React.useState(null);
   const data = JSON.parse(atob(localStorage.getItem("token")));
@@ -93,7 +93,7 @@ const Typography = () => {
       localStorage.setItem("TOP", btoa(JSON.stringify(val)));
       setSectionSelected(val[0]);
       selectMenuList(val[0], menulistdata);
-      // console.log(TypeOfProducts);
+      console.log(TypeOfProducts);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -194,8 +194,9 @@ const Typography = () => {
   };
   const selectMenuList = (val, menulistdata) => {
     setSectionSelected(val);
-    let menuData =
-      menulistdata && menulistdata.filter((x) => x.productType === val);
+    let menuData = menulistdata
+      ? menulistdata.filter((x) => x.productType === val)
+      : [];
     setMenuListType(menuData);
     localStorage.setItem("TMLT", btoa(JSON.stringify(menuData)));
   };
