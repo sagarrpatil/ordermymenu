@@ -257,10 +257,10 @@ const CounterMenu = () => {
     setValueOfTab(newValue);
   };
   const handleChangeSetValueTab = (event, newValue) => {
+    let foodname = event.target.innerText.split("₹")[0];
     let value = menuList.find(
       (x) =>
-        x.productName.toUpperCase().trim() ===
-        event.target.innerText.toUpperCase().trim(),
+        x.productName.toUpperCase().trim() === foodname.toUpperCase().trim(),
     );
     console.log("item", event.target.innerText, value);
     onChangeProductName(event, value);
@@ -352,6 +352,7 @@ const CounterMenu = () => {
             aria-label="scrollable auto tabs example"
           >
             {menuList &&
+              menuList.length > 0 &&
               menuList
                 .filter(
                   (item) => item.productType === TypeOfProducts[valueOfTab],
@@ -361,9 +362,12 @@ const CounterMenu = () => {
                     (removeItem) => removeItem.id === item.id,
                   );
                 })
-                .sort()
+                .sort((a, b) => a.productName.localeCompare(b.productName))
                 .map((val) => (
-                  <Tab sx={{ fontSize: 15 }} label={val.productName} />
+                  <Tab
+                    sx={{ fontSize: 15 }}
+                    label={val.productName + ` ₹${val.productPrice}`}
+                  />
                 ))}
           </Tabs>
         </Grid>
