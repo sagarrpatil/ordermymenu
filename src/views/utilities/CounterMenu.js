@@ -285,23 +285,21 @@ const CounterMenu = () => {
                 )}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={5} lg={5}>
+            <Grid item xs={12} sm={6} md={5} lg={5} sx={{background: "#e8e6e6", marginTop:1}}>
               <List dense={dense} sx={{ width: "100%" }}>
                 {menuStack.length > 0 &&
                   menuStack.map((val, i) => (
                     <ListItem
                       key={val.id}
                       secondaryAction={
-                        <></>
-                        // <IconButton edge="end" aria-label="delete" onClick={() => removeProductfromMenu(val.id)}>
-                        //   <DeleteIcon />
-                        // </IconButton>
+                        <Divider/>
                       }
                     >
                       <ListItemText
                         primary={val.productName}
                         secondary={"₹ " + val.productPrice}
                       />
+                  
                       <ListItemAvatar style={{ display: "flex" }}>
                         <Fab
                           size="small"
@@ -331,6 +329,11 @@ const CounterMenu = () => {
                           <AddIcon />
                         </Fab>
                       </ListItemAvatar>
+                      <ListItemText
+                        primary={"₹" + Number(val.productPrice * val.quantity)}
+                        secondary={"Total"}
+                        style={{ paddingLeft: 20}}
+                      />
                     </ListItem>
                   ))}
               </List>
