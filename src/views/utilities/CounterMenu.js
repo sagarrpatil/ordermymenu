@@ -438,6 +438,8 @@ const CounterMenu = () => {
                           }}
                         >
                           {val.quantity}
+                          <br/>
+                          <span style={{color: "#757575", fontSize:14}}>{"₹" + Number(val.productPrice * val.quantity)}</span>
                         </div>
                         <Fab
                           size="small"
@@ -448,11 +450,11 @@ const CounterMenu = () => {
                           <AddIcon />
                         </Fab>
                       </ListItemAvatar>
-                      <ListItemText
+                      {/* <ListItemText
                         primary={"₹" + Number(val.productPrice * val.quantity)}
                         secondary={"Total"}
                         style={{ paddingLeft: 20 }}
-                      />
+                      /> */}
                     </ListItem>
                   ))}
               </List>
