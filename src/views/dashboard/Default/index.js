@@ -81,7 +81,7 @@ const Dashboard = () => {
     if (today) {
       const orderTotal = data.transaction
         .filter((transaction) => transaction.label === type)
-        .reduce((acc, item) => acc + item.value, 0);
+        .reduce((acc, item) => acc + Number(item.value), 0);
       return orderTotal;
     }
   };
