@@ -29,6 +29,7 @@ import {
   updateDoc,
   setDoc,
 } from "@firebase/firestore";
+import { useMediaQuery } from "@mui/material";
 import { getDatabase, ref, onValue, once, set } from "@firebase/database";
 import { height } from "@mui/system";
 import List from "@mui/material/List";
@@ -47,22 +48,35 @@ import moment from "moment";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 
 const CounterMenu = () => {
   const { id, table, section } = useParams();
   const [dense, setDense] = React.useState(false);
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
   let itemtoken = localStorage.getItem("itemtoken")
     ? JSON.parse(atob(localStorage.getItem("itemtoken")))
     : [];
   const [menuList, setMenuList] = React.useState(itemtoken);
   const data = JSON.parse(atob(localStorage.getItem("token")));
+  let TOP = localStorage.getItem("TOP")
+    ? JSON.parse(atob(localStorage.getItem("TOP")))
+    : null;
+  const [TypeOfProducts, setTypeOfProducts] = React.useState(TOP);
+  const [sectionSelected, setSectionSelected] = React.useState(
+    TOP ? TOP[0] : null,
+  );
   const [productName, setProductName] = React.useState(null);
   const [menuStack, setMenuStack] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [err, setError] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const navigate = useNavigate();
-
+  let TMLT = localStorage.getItem("TMLT")
+    ? JSON.parse(atob(localStorage.getItem("TMLT")))
+    : [];
+  const [menuListType, setMenuListType] = React.useState(TMLT);
   const [transactionMode, setTransactionMode] = React.useState([
     {
       label: "UPI",
@@ -141,6 +155,7 @@ const CounterMenu = () => {
     }
     fetchData();
     getAllData();
+    fetchDataType();
   }, []);
   const removeProductfromMenu = (id) => {
     const removedMenu = menuStack.filter((item) => item.id !== id);
@@ -236,22 +251,124 @@ const CounterMenu = () => {
       else setError("Please Select Any Mode of Payment");
     }
   }, [transactionMode, open]);
+
+  const [valueOfTab, setValueOfTab] = React.useState(0);
+  const handleChangeTab = (event, newValue) => {
+    setValueOfTab(newValue);
+  };
+  const handleChangeSetValueTab = (event, newValue) => {
+    let value = menuList.find((x) => x.productName === event.target.innerText);
+    console.log("item", event.target.innerText, value);
+    onChangeProductName(event, value);
+  };
+  const fetchDataType = async (menulistdata) => {
+    try {
+      const userDocRef = doc(db, data.user.email, "MenuOrganization");
+      const menuItemsCollectionRef = collection(userDocRef, "MenuTypes");
+      const querySnapshot = await getDocs(menuItemsCollectionRef);
+      const items = [];
+      querySnapshot.forEach((doc) => {
+        items.push(doc.data().type);
+      });
+      let val = [...new Set(items)].sort();
+      setTypeOfProducts(val);
+      localStorage.setItem("TOP", btoa(JSON.stringify(val)));
+      setSectionSelected(val[0]);
+      selectMenuList(val[0], menulistdata);
+      console.log(TypeOfProducts);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const selectMenuList = (val, menulistdata) => {
+    setSectionSelected(val);
+    let menuData = menulistdata
+      ? menulistdata.filter((x) => x.productType === val)
+      : [];
+    setMenuListType(menuData);
+    localStorage.setItem("TMLT", btoa(JSON.stringify(menuData)));
+  };
+
   return (
     <MainCard
       title={"Order & Bill"}
       secondary={
-        <Button variant="outlined" onClick={() => {}}>
-          Bill View
+        <Button
+          size="large"
+          sx={{ background: "orange", color: "#fff" }}
+          disabled={menuStack.length <= 0}
+          onClick={() => setOpen(true)}
+        >
+          Get Bill
         </Button>
       }
     >
       <Grid container spacing={1}>
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{ padding: 1 }}>
           <Typography>{"Table Number: " + table + ` (${section})`}</Typography>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          lg={2}
+          md={2}
+          sm={2}
+          sx={{ backgroundColor: "#ffb554" }}
+        >
+          <Tabs
+            value={valueOfTab}
+            onChange={handleChangeTab}
+            indicatorColor="secondary"
+            textColor="inherit"
+            sx={{ backgroundColor: "#ffb554" }}
+            orientation={isSmallScreen ? "horizontal" : "vertical"}
+            variant="scrollable"
+            scrollButtons="auto"
+            aria-label="scrollable auto tabs example"
+          >
+            {TypeOfProducts && TypeOfProducts.map((val) => <Tab label={val} />)}
+          </Tabs>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          lg={2}
+          md={2}
+          sm={2}
+          sx={{ backgroundColor: "#f2d4ac" }}
+        >
+          <Tabs
+            onChange={handleChangeSetValueTab}
+            orientation={isSmallScreen ? "horizontal" : "vertical"}
+            variant="scrollable"
+            scrollButtons="auto"
+            indicatorColor="secondary"
+            textColor="#000"
+            sx={{ backgroundColor: "#f2d4ac" }}
+            aria-label="scrollable auto tabs example"
+          >
+            {menuList &&
+              menuList
+                .filter(
+                  (item) => item.productType === TypeOfProducts[valueOfTab],
+                )
+                .filter((item) => {
+                  return !menuStack.some(
+                    (removeItem) => removeItem.id === item.id,
+                  );
+                })
+                .sort()
+                .map((val) => (
+                  <Tab sx={{ fontSize: 15 }} label={val.productName} />
+                ))}
+          </Tabs>
+        </Grid>
+
+        <Grid item xs={12} lg={8} md={8} sm={8}>
           <br />
           {/* <SubCard title={"Table Number: " + table +` (${section})`} sx={{height:"80vh"}}> */}
-          <Grid container spacing={1}>
-            <Grid item xs={12} sm={6} md={4} lg={2}>
+          <Grid container>
+            <Grid item xs={12}>
               <Autocomplete
                 disablePortal
                 value={productName?.productName}
@@ -285,21 +402,23 @@ const CounterMenu = () => {
                 )}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={5} lg={5} sx={{background: "#e8e6e6", marginTop:1}}>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                background: menuStack.length > 0 ? "#e8e6e6" : "#fff",
+                marginTop: 1,
+              }}
+            >
               <List dense={dense} sx={{ width: "100%" }}>
                 {menuStack.length > 0 &&
                   menuStack.map((val, i) => (
-                    <ListItem
-                      key={val.id}
-                      secondaryAction={
-                        <Divider/>
-                      }
-                    >
+                    <ListItem key={val.id} secondaryAction={<Divider />}>
                       <ListItemText
                         primary={val.productName}
                         secondary={"₹ " + val.productPrice}
                       />
-                  
+
                       <ListItemAvatar style={{ display: "flex" }}>
                         <Fab
                           size="small"
@@ -332,7 +451,7 @@ const CounterMenu = () => {
                       <ListItemText
                         primary={"₹" + Number(val.productPrice * val.quantity)}
                         secondary={"Total"}
-                        style={{ paddingLeft: 20}}
+                        style={{ paddingLeft: 20 }}
                       />
                     </ListItem>
                   ))}
