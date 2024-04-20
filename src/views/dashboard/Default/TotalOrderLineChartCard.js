@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // material-ui
 import { useTheme, styled } from "@mui/material/styles";
@@ -18,6 +18,7 @@ import ChartDataYear from "./chart-data/total-order-year-line-chart";
 // assets
 import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import moment from "moment";
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
   backgroundColor: theme.palette.primary.dark,
@@ -63,13 +64,30 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 // ==============================|| DASHBOARD - TOTAL ORDER LINE CHART CARD ||============================== //
 
-const TotalOrderLineChartCard = ({ isLoading }) => {
+const TotalOrderLineChartCard = ({ isLoading, transaction }) => {
   const theme = useTheme();
 
   const [timeValue, setTimeValue] = useState(false);
+  const [orderTotalValue, setOrderTotalValue] = useState(0);
   const handleChangeTime = (event, newValue) => {
     setTimeValue(newValue);
   };
+  useEffect(() =>{
+    let orderTotal = 0;
+    transaction.length>0 && transaction.map((val)=>{
+      orderTotal += getAmountByTransaction(val)
+    })
+    setOrderTotalValue(orderTotal)
+  },[transaction]);
+  
+  const getAmountByTransaction = (data) =>{
+      let date = Number(data.billTime)
+      const today = moment().isSame(date, 'day');
+      if(today){
+        const orderTotal = data.menuStack.reduce((acc, item) => acc + (item.productPrice * item.quantity), 0);
+        return orderTotal;
+      }
+  }
 
   return (
     <>
@@ -112,7 +130,7 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                       sx={{ color: "inherit" }}
                       onClick={(e) => handleChangeTime(e, false)}
                     >
-                      Year
+                      Today's
                     </Button>
                   </Grid>
                 </Grid>
@@ -132,7 +150,7 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                               mb: 0.75,
                             }}
                           >
-                            ₹108
+                            ₹{orderTotalValue}
                           </Typography>
                         ) : (
                           <Typography
@@ -144,12 +162,12 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                               mb: 0.75,
                             }}
                           >
-                            ₹961
+                            ₹{orderTotalValue}
                           </Typography>
                         )}
                       </Grid>
                       <Grid item>
-                        <Avatar
+                        {/* <Avatar
                           sx={{
                             ...theme.typography.smallAvatar,
                             cursor: "pointer",
@@ -161,7 +179,7 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                             fontSize="inherit"
                             sx={{ transform: "rotate3d(1, 1, 1, 45deg)" }}
                           />
-                        </Avatar>
+                        </Avatar> */}
                       </Grid>
                       <Grid item xs={12}>
                         <Typography
@@ -171,18 +189,18 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                             color: theme.palette.primary[200],
                           }}
                         >
-                          Total Order
+                          Total Amount
                         </Typography>
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item xs={6}>
+                  {/* <Grid item xs={6}>
                     {timeValue ? (
                       <Chart {...ChartDataMonth} />
                     ) : (
                       <Chart {...ChartDataYear} />
                     )}
-                  </Grid>
+                  </Grid> */}
                 </Grid>
               </Grid>
             </Grid>

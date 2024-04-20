@@ -48,7 +48,7 @@ const PopularCard = ({ isLoading }) => {
         <SkeletonPopularCard />
       ) : (
         <MainCard content={false}>
-          {/* <CardContent>
+          <CardContent>
             <Grid container spacing={gridSpacing}>
               <Grid item xs={12}>
                 <Grid container alignContent="center" justifyContent="space-between">
@@ -156,8 +156,8 @@ const PopularCard = ({ isLoading }) => {
                                 width: 16,
                                 height: 16,
                                 borderRadius: '5px',
-                                backgroundColor: theme.palette.#773200.light,
-                                color: theme.palette.#773200.dark,
+                                backgroundColor: "#773200",
+                                color: "#773200",
                                 marginLeft: 1.875
                               }}
                             >
@@ -169,7 +169,7 @@ const PopularCard = ({ isLoading }) => {
                     </Grid>
                   </Grid>
                   <Grid item>
-                    <Typography variant="subtitle2" sx={{ color: theme.palette.#773200.dark }}>
+                    <Typography variant="subtitle2" sx={{ color: "#773200"}}>
                       10% loss
                     </Typography>
                   </Grid>
@@ -238,8 +238,8 @@ const PopularCard = ({ isLoading }) => {
                                 width: 16,
                                 height: 16,
                                 borderRadius: '5px',
-                                backgroundColor: theme.palette.#773200.light,
-                                color: theme.palette.#773200.dark,
+                                backgroundColor: "#773200",
+                                color: "#773200",
                                 ml: 2
                               }}
                             >
@@ -251,7 +251,7 @@ const PopularCard = ({ isLoading }) => {
                     </Grid>
                   </Grid>
                   <Grid item>
-                    <Typography variant="subtitle2" sx={{ color: theme.palette.#773200.dark }}>
+                    <Typography variant="subtitle2" sx={{ color: "#773200", }}>
                       10% loss
                     </Typography>
                   </Grid>
@@ -279,8 +279,8 @@ const PopularCard = ({ isLoading }) => {
                                 width: 16,
                                 height: 16,
                                 borderRadius: '5px',
-                                backgroundColor: theme.palette.#773200.light,
-                                color: theme.palette.#773200.dark,
+                                backgroundColor: "#773200",
+                                color: "#773200",
                                 ml: 2
                               }}
                             >
@@ -292,20 +292,20 @@ const PopularCard = ({ isLoading }) => {
                     </Grid>
                   </Grid>
                   <Grid item>
-                    <Typography variant="subtitle2" sx={{ color: theme.palette.#773200.dark }}>
+                    <Typography variant="subtitle2" sx={{ color: "#773200", }}>
                       10% loss
                     </Typography>
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </CardContent> */}
-          {/* <CardActions sx={{ p: 1.25, pt: 0, justifyContent: 'center' }}>
+          </CardContent>
+          <CardActions sx={{ p: 1.25, pt: 0, justifyContent: 'center' }}>
             <Button size="small" disableElevation>
               View All
               <ChevronRightOutlinedIcon />
             </Button>
-          </CardActions> */}
+          </CardActions>
         </MainCard>
       )}
     </>

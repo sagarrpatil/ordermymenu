@@ -11,24 +11,54 @@ import TotalIncomeDarkCard from "./TotalIncomeDarkCard";
 import TotalIncomeLightCard from "./TotalIncomeLightCard";
 import TotalGrowthBarChart from "./TotalGrowthBarChart";
 import { gridSpacing } from "store/constant";
-
-// ==============================|| DEFAULT DASHBOARD ||============================== //
+import { db, realtimeDb } from "../../../firebase";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  doc,
+  updateDoc,
+  setDoc,
+} from "@firebase/firestore";
 
 const Dashboard = () => {
   const [isLoading, setLoading] = useState(true);
+  const data = JSON.parse(atob(localStorage.getItem("token")));
+  const [transaction, setTransaction]  = useState([]);
   useEffect(() => {
-    setLoading(false);
+    fetchData();
   }, []);
 
+  const fetchData = async () => {
+    try {
+      const userDocRef = doc(db, data.user.email, "transaction");
+      const menuItemsCollectionRef = collection(
+        userDocRef,
+        "transaction"
+      );
+      const querySnapshot = await getDocs(menuItemsCollectionRef);
+      const items = [];
+      querySnapshot.forEach((doc) => {
+        items.push({ id: doc.id, ...doc.data() });
+      });
+      setTransaction(items);
+      console.log(items)
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error("Error fetching data:", error);
+    }
+  };
   return (
     <Grid container spacing={gridSpacing}>
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
-          <Grid item lg={4} md={6} sm={6} xs={12}>
+          {/* <Grid item lg={4} md={6} sm={6} xs={12}>
             <EarningCard isLoading={isLoading} />
-          </Grid>
+          </Grid> */}
           <Grid item lg={4} md={6} sm={6} xs={12}>
-            <TotalOrderLineChartCard isLoading={isLoading} />
+            <TotalOrderLineChartCard transaction={transaction} isLoading={isLoading} />
           </Grid>
           <Grid item lg={4} md={12} sm={12} xs={12}>
             <Grid container spacing={gridSpacing}>
@@ -45,10 +75,10 @@ const Dashboard = () => {
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
           <Grid item xs={12} md={8}>
-            <TotalGrowthBarChart isLoading={isLoading} />
+            {/* <TotalGrowthBarChart isLoading={isLoading} /> */}
           </Grid>
           <Grid item xs={12} md={4}>
-            <PopularCard isLoading={isLoading} />
+            {/* <Popular  Card isLoading={isLoading} /> */}
           </Grid>
         </Grid>
       </Grid>

@@ -82,7 +82,7 @@ const CounterMenu = () => {
   ]);
 
   const now = new Date();
-  const currentTime = Math.floor(now.getTime() / 1000);
+  const currentTime = Math.floor(now.getTime());
 
   const getAllData = async () => {
     try {
@@ -192,12 +192,13 @@ const CounterMenu = () => {
     let newObject = {
       menuStack: menuStack,
       transaction: transactionMode.filter((x) => x.value),
+      billTime: currentTime.toString()
     };
     try {
       const userDocRef = doc(db, data.user.email, "transaction"); // Replace with your collection name
       const menuItemsCollectionRef = collection(
         userDocRef,
-        currentTime.toString(),
+        "transaction"
       );
       await addDoc(menuItemsCollectionRef, newObject);
       const dataRef = ref(
