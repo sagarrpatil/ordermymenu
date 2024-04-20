@@ -64,30 +64,35 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 // ==============================|| DASHBOARD - TOTAL ORDER LINE CHART CARD ||============================== //
 
-const TotalOrderLineChartCard = ({ isLoading, transaction }) => {
+const TotalOrderLineChartCard = ({ isLoading, transaction, fetchData }) => {
   const theme = useTheme();
 
   const [timeValue, setTimeValue] = useState(false);
   const [orderTotalValue, setOrderTotalValue] = useState(0);
   const handleChangeTime = (event, newValue) => {
+    fetchData();
     setTimeValue(newValue);
   };
-  useEffect(() =>{
+  useEffect(() => {
     let orderTotal = 0;
-    transaction.length>0 && transaction.map((val)=>{
-      orderTotal += getAmountByTransaction(val)
-    })
-    setOrderTotalValue(orderTotal)
-  },[transaction]);
-  
-  const getAmountByTransaction = (data) =>{
-      let date = Number(data.billTime)
-      const today = moment().isSame(date, 'day');
-      if(today){
-        const orderTotal = data.menuStack.reduce((acc, item) => acc + (item.productPrice * item.quantity), 0);
-        return orderTotal;
-      }
-  }
+    transaction.length > 0 &&
+      transaction.map((val) => {
+        orderTotal += getAmountByTransaction(val);
+      });
+    setOrderTotalValue(orderTotal);
+  }, [transaction]);
+
+  const getAmountByTransaction = (data) => {
+    let date = Number(data.billTime);
+    const today = moment().isSame(date, "day");
+    if (today) {
+      const orderTotal = data.menuStack.reduce(
+        (acc, item) => acc + item.productPrice * item.quantity,
+        0,
+      );
+      return orderTotal;
+    }
+  };
 
   return (
     <>

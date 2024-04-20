@@ -21,11 +21,15 @@ import {
   updateDoc,
   setDoc,
 } from "@firebase/firestore";
+import moment from "moment";
 
 const Dashboard = () => {
   const [isLoading, setLoading] = useState(true);
   const data = JSON.parse(atob(localStorage.getItem("token")));
-  const [transaction, setTransaction]  = useState([]);
+  const [transaction, setTransaction] = useState([]);
+  const [orderTotalUPI, setOrderTotalUPI] = useState(0);
+  const [orderTotalCash, setOrderTotalCash] = useState(0);
+  const [orderTotalCard, setOrderTotalCard] = useState(0);
   useEffect(() => {
     fetchData();
   }, []);
@@ -33,21 +37,52 @@ const Dashboard = () => {
   const fetchData = async () => {
     try {
       const userDocRef = doc(db, data.user.email, "transaction");
-      const menuItemsCollectionRef = collection(
-        userDocRef,
-        "transaction"
-      );
+      const menuItemsCollectionRef = collection(userDocRef, "transaction");
       const querySnapshot = await getDocs(menuItemsCollectionRef);
       const items = [];
       querySnapshot.forEach((doc) => {
         items.push({ id: doc.id, ...doc.data() });
       });
       setTransaction(items);
-      console.log(items)
+      console.log(items);
       setLoading(false);
     } catch (error) {
       setLoading(false);
       console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    let orderTotalUPI = 0;
+    transaction.length > 0 &&
+      transaction.map((val) => {
+        orderTotalUPI += getAmountByTransaction(val, "UPI");
+      });
+    setOrderTotalUPI(orderTotalUPI);
+
+    let orderTotalcash = 0;
+    transaction.length > 0 &&
+      transaction.map((val) => {
+        orderTotalcash += getAmountByTransaction(val, "CASH");
+      });
+    setOrderTotalCash(orderTotalcash);
+
+    let orderTotalcard = 0;
+    transaction.length > 0 &&
+      transaction.map((val) => {
+        orderTotalcard += getAmountByTransaction(val, "CARD");
+      });
+    setOrderTotalCard(orderTotalcard);
+  }, [transaction]);
+
+  const getAmountByTransaction = (data, type) => {
+    let date = Number(data.billTime);
+    const today = moment().isSame(date, "day");
+    if (today) {
+      const orderTotal = data.transaction
+        .filter((transaction) => transaction.label === type)
+        .reduce((acc, item) => acc + item.value, 0);
+      return orderTotal;
     }
   };
   return (
@@ -58,16 +93,44 @@ const Dashboard = () => {
             <EarningCard isLoading={isLoading} />
           </Grid> */}
           <Grid item lg={4} md={6} sm={6} xs={12}>
-            <TotalOrderLineChartCard transaction={transaction} isLoading={isLoading} />
+            <TotalOrderLineChartCard
+              transaction={transaction}
+              isLoading={isLoading}
+              fetchData={() => fetchData()}
+            />
           </Grid>
           <Grid item lg={4} md={12} sm={12} xs={12}>
             <Grid container spacing={gridSpacing}>
-              <Grid item sm={6} xs={12} md={6} lg={12}>
-                <TotalIncomeDarkCard isLoading={isLoading} />
-              </Grid>
-              <Grid item sm={6} xs={12} md={6} lg={12}>
-                <TotalIncomeLightCard isLoading={isLoading} />
-              </Grid>
+              {orderTotalUPI > 0 && (
+                <Grid item sm={6} xs={12} md={6} lg={12}>
+                  <TotalIncomeLightCard
+                    type="UPI"
+                    orderTotalUPI={orderTotalUPI}
+                    transaction={transaction}
+                    isLoading={isLoading}
+                  />
+                </Grid>
+              )}
+              {orderTotalCash > 0 && (
+                <Grid item sm={6} xs={12} md={6} lg={12}>
+                  <TotalIncomeLightCard
+                    type="CASH"
+                    orderTotalUPI={orderTotalCash}
+                    transaction={transaction}
+                    isLoading={isLoading}
+                  />
+                </Grid>
+              )}
+              {orderTotalCard > 0 && (
+                <Grid item sm={6} xs={12} md={6} lg={12}>
+                  <TotalIncomeLightCard
+                    type="CARD"
+                    orderTotalUPI={orderTotalCard}
+                    transaction={transaction}
+                    isLoading={isLoading}
+                  />
+                </Grid>
+              )}
             </Grid>
           </Grid>
         </Grid>

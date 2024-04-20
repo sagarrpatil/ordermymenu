@@ -192,14 +192,11 @@ const CounterMenu = () => {
     let newObject = {
       menuStack: menuStack,
       transaction: transactionMode.filter((x) => x.value),
-      billTime: currentTime.toString()
+      billTime: currentTime.toString(),
     };
     try {
       const userDocRef = doc(db, data.user.email, "transaction"); // Replace with your collection name
-      const menuItemsCollectionRef = collection(
-        userDocRef,
-        "transaction"
-      );
+      const menuItemsCollectionRef = collection(userDocRef, "transaction");
       await addDoc(menuItemsCollectionRef, newObject);
       const dataRef = ref(
         realtimeDb,
