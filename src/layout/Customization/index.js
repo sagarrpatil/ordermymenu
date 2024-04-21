@@ -51,16 +51,7 @@ const Customization = () => {
     setBorderRadius(newValue);
   };
 
-  useEffect(() => {
-    const token = new URLSearchParams(window.location.search).get("token");
-    if (token) {
-      localStorage.setItem("token", token);
-      localStorage.setItem("access", true);
-      if (localStorage.getItem("token") === null) {
-        window.location.href = "/";
-      }
-    }
-  }, []);
+
   useEffect(() => {
     dispatch({ type: SET_BORDER_RADIUS, borderRadius });
   }, [dispatch, borderRadius]);

@@ -17,11 +17,16 @@ import { useEffect } from "react";
 
 const App = () => {
   const customization = useSelector((state) => state.customization);
-  // useEffect(() => {
-  //   if(!localStorage.getItem("token")){
-  //       window.location.href = "/pages/login/login3";
-  //   }
-  // },[])
+  useEffect(() => {
+    const token = new URLSearchParams(window.location.search).get("token");
+    if (token) {
+      localStorage.setItem("token", token);
+      localStorage.setItem("access", true);
+      if (localStorage.getItem("token") === null) {
+        window.location.href = "/";
+      }
+    }
+  }, []);
 
   return (
     <StyledEngineProvider injectFirst>
