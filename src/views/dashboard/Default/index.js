@@ -59,21 +59,27 @@ const Dashboard = () => {
     let orderTotalUPI = 0;
     transaction.length > 0 &&
       transaction.map((val) => {
-        orderTotalUPI += getAmountByTransaction(val, "UPI");
+        let amount =getAmountByTransaction(val, "UPI");
+        if(amount)
+        orderTotalUPI += amount;
       });
     setOrderTotalUPI(orderTotalUPI);
 
     let orderTotalcash = 0;
     transaction.length > 0 &&
       transaction.map((val) => {
-        orderTotalcash += getAmountByTransaction(val, "CASH");
+        let amount =getAmountByTransaction(val, "CASH");
+        if(amount)
+        orderTotalcash += amount;
       });
     setOrderTotalCash(orderTotalcash);
 
     let orderTotalcard = 0;
     transaction.length > 0 &&
       transaction.map((val) => {
-        orderTotalcard += getAmountByTransaction(val, "CARD");
+        let amount =getAmountByTransaction(val, "CARD");
+        if(amount)
+        orderTotalcard += amount;
       });
     setOrderTotalCard(orderTotalcard);
   }, [transaction]);
