@@ -30,16 +30,19 @@ const Dashboard = () => {
   const [orderTotalUPI, setOrderTotalUPI] = useState(0);
   const [orderTotalCash, setOrderTotalCash] = useState(0);
   const [orderTotalCard, setOrderTotalCard] = useState(0);
+  const [TimeSet, setTimeSet] = useState("day");
   useEffect(() => {
-    fetchData();
+    fetchData("day");
   }, []);
 
-  const fetchData = async () => {
+  const fetchData = async (time) => {
     try {
+  
       const userDocRef = doc(db, data.user.email, "transaction");
       const menuItemsCollectionRef = collection(userDocRef, "transaction");
       const querySnapshot = await getDocs(menuItemsCollectionRef);
       const items = [];
+      setTimeSet(time)
       querySnapshot.forEach((doc) => {
         items.push({ id: doc.id, ...doc.data() });
       });
@@ -77,7 +80,7 @@ const Dashboard = () => {
 
   const getAmountByTransaction = (data, type) => {
     let date = Number(data.billTime);
-    const today = moment().isSame(date, "day");
+    const today = moment().isSame(date, TimeSet);
     if (today) {
       const orderTotal = data.transaction
         .filter((transaction) => transaction.label === type)
@@ -96,7 +99,7 @@ const Dashboard = () => {
             <TotalOrderLineChartCard
               transaction={transaction}
               isLoading={isLoading}
-              fetchData={() => fetchData()}
+              fetchData={(TimeSet) => fetchData(TimeSet)}
             />
           </Grid>
           <Grid item lg={4} md={12} sm={12} xs={12}>

@@ -87,7 +87,7 @@ const UtilitiesShadow = () => {
       );
       const unsubscribe = onValue(dataRef, (snapshot) => {
         const data = snapshot.val();
-        console.log(data);
+        // console.log(data);
         setTableFilled(data);
         // unsubscribe();
       });

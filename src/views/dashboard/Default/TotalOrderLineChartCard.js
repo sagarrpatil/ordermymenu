@@ -68,10 +68,11 @@ const TotalOrderLineChartCard = ({ isLoading, transaction, fetchData }) => {
   const theme = useTheme();
 
   const [timeValue, setTimeValue] = useState(false);
+  const [TimeSet, setTimeSet] = useState("day");
   const [orderTotalValue, setOrderTotalValue] = useState(0);
   const handleChangeTime = (event, newValue) => {
-    fetchData();
-    setTimeValue(newValue);
+    fetchData(newValue);
+    setTimeSet(newValue);
   };
   useEffect(() => {
     let orderTotal = 0;
@@ -84,7 +85,7 @@ const TotalOrderLineChartCard = ({ isLoading, transaction, fetchData }) => {
 
   const getAmountByTransaction = (data) => {
     let date = Number(data.billTime);
-    const today = moment().isSame(date, "day");
+    const today = moment().isSame(date, TimeSet);
     if (today) {
       const orderTotal = data.menuStack.reduce(
         (acc, item) => acc + item.productPrice * item.quantity,
@@ -121,19 +122,19 @@ const TotalOrderLineChartCard = ({ isLoading, transaction, fetchData }) => {
                   <Grid item>
                     <Button
                       disableElevation
-                      variant={timeValue ? "contained" : "text"}
+                      variant={TimeSet === "month" ? "contained" : "text"}
                       size="small"
                       sx={{ color: "inherit" }}
-                      onClick={(e) => handleChangeTime(e, true)}
+                      onClick={(e) => handleChangeTime(e, "month")}
                     >
                       Month
                     </Button>
                     <Button
                       disableElevation
-                      variant={!timeValue ? "contained" : "text"}
+                      variant={TimeSet === "day" ? "contained" : "text"}
                       size="small"
                       sx={{ color: "inherit" }}
-                      onClick={(e) => handleChangeTime(e, false)}
+                      onClick={(e) => handleChangeTime(e, "day")}
                     >
                       Today's
                     </Button>

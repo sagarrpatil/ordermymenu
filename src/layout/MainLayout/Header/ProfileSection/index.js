@@ -88,7 +88,7 @@ const ProfileSection = () => {
 
   const prevOpen = useRef(open);
   useEffect(() => {
-    console.log(data);
+    // console.log(data);
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
