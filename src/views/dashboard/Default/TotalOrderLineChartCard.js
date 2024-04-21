@@ -155,7 +155,7 @@ const TotalOrderLineChartCard = ({ isLoading, transaction, fetchData }) => {
                               mb: 0.75,
                             }}
                           >
-                            ₹{orderTotalValue}
+                            ₹{orderTotalValue.toString() === "NaN" ? 0  : orderTotalValue}
                           </Typography>
                         ) : (
                           <Typography
@@ -167,7 +167,7 @@ const TotalOrderLineChartCard = ({ isLoading, transaction, fetchData }) => {
                               mb: 0.75,
                             }}
                           >
-                            ₹{orderTotalValue}
+                            ₹{orderTotalValue.toString() === "NaN" ? 0  : orderTotalValue}
                           </Typography>
                         )}
                       </Grid>

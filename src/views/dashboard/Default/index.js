@@ -44,7 +44,7 @@ const Dashboard = () => {
         items.push({ id: doc.id, ...doc.data() });
       });
       setTransaction(items);
-      console.log(items);
+      // console.log("items", items);
       setLoading(false);
     } catch (error) {
       setLoading(false);
