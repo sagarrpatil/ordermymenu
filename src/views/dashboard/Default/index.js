@@ -105,7 +105,7 @@ const Dashboard = () => {
           <Grid item lg={4} md={12} sm={12} xs={12}>
             <Grid container spacing={gridSpacing}>
               {orderTotalUPI > 0 && (
-                <Grid item sm={6} xs={12} md={6} lg={12}>
+                <Grid item sm={6} xs={6} md={6} lg={12}>
                   <TotalIncomeLightCard
                     type="UPI"
                     orderTotalUPI={orderTotalUPI}
@@ -115,7 +115,7 @@ const Dashboard = () => {
                 </Grid>
               )}
               {orderTotalCash > 0 && (
-                <Grid item sm={6} xs={12} md={6} lg={12}>
+                <Grid item sm={6} xs={6} md={6} lg={12}>
                   <TotalIncomeLightCard
                     type="CASH"
                     orderTotalUPI={orderTotalCash}
@@ -125,7 +125,7 @@ const Dashboard = () => {
                 </Grid>
               )}
               {orderTotalCard > 0 && (
-                <Grid item sm={6} xs={12} md={6} lg={12}>
+                <Grid item sm={6} xs={6} md={6} lg={12}>
                   <TotalIncomeLightCard
                     type="CARD"
                     orderTotalUPI={orderTotalCard}
@@ -144,7 +144,7 @@ const Dashboard = () => {
             {/* <TotalGrowthBarChart isLoading={isLoading} /> */}
           </Grid>
           <Grid item xs={12} md={4}>
-            {/* <Popular  Card isLoading={isLoading} /> */}
+            {/* <PopularCard  isLoading={isLoading} /> */}
           </Grid>
         </Grid>
       </Grid>
