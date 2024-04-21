@@ -78,17 +78,21 @@ const TotalOrderLineChartCard = ({ isLoading, transaction, fetchData }) => {
     let orderTotal = 0;
     transaction.length > 0 &&
       transaction.map((val) => {
-        orderTotal += getAmountByTransaction(val);
+        let amount = getAmountByTransaction(val);
+        if(amount)
+        orderTotal += amount
       });
+     
     setOrderTotalValue(orderTotal);
   }, [transaction]);
 
   const getAmountByTransaction = (data) => {
     let date = Number(data.billTime);
     const today = moment().isSame(date, TimeSet);
+
     if (today) {
       const orderTotal = data.menuStack.reduce(
-        (acc, item) => acc + item.productPrice * item.quantity,
+        (acc, item) => acc + Number(item.productPrice) * Number(item.quantity),
         0,
       );
       return orderTotal;
