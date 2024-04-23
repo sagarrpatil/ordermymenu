@@ -74,6 +74,7 @@ const UtilitiesShadow = () => {
     : null;
   const [counterList, setCounterList] = React.useState(JSON.parse(counter));
   const [tableFilled, setTableFilled] = React.useState([]);
+  const [upcommingAmont, setupcommingAmont] = React.useState(0);
   const navigate = useNavigate();
   const handleClickOpen = () => {
     setOpen(true);
@@ -87,14 +88,32 @@ const UtilitiesShadow = () => {
       );
       const unsubscribe = onValue(dataRef, (snapshot) => {
         const data = snapshot.val();
-        // console.log(data);
+        console.log(data);
         setTableFilled(data);
         // unsubscribe();
+        let combinedTotals = 0;
+
+        for (const key in data) {
+          const order = data[key];
+          let totalPrice = 0;
+          for (const item of order) {
+            totalPrice += item.productPrice * item.quantity;
+          }
+          combinedTotals += totalPrice;
+        }
+        setupcommingAmont(combinedTotals);
       });
     } catch (error) {
       console.error("Error retrieving data:", error);
     }
   };
+  function calculateOrderTotal(order) {
+    let totalPrice = 0;
+    for (const item of order) {
+      totalPrice += item.productPrice * item.quantity;
+    }
+    return totalPrice;
+  }
   const fetchData = async () => {
     try {
       const userDocRef = doc(db, data.user.email, "CounterSection");
@@ -178,6 +197,11 @@ const UtilitiesShadow = () => {
       }
     >
       <Grid container spacing={gridSpacing}>
+        <Grid item xs={12} sx={{ padding: 0 }}>
+          <span style={{ paddingRight: 0 }}>
+            Queue: <b>₹ {upcommingAmont}</b>
+          </span>
+        </Grid>
         {counterList && counterList.length > 0 ? (
           counterList.map((section) => (
             <Grid item xs={12}>

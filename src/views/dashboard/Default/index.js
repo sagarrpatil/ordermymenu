@@ -37,12 +37,11 @@ const Dashboard = () => {
 
   const fetchData = async (time) => {
     try {
-  
       const userDocRef = doc(db, data.user.email, "transaction");
       const menuItemsCollectionRef = collection(userDocRef, "transaction");
       const querySnapshot = await getDocs(menuItemsCollectionRef);
       const items = [];
-      setTimeSet(time)
+      setTimeSet(time);
       querySnapshot.forEach((doc) => {
         items.push({ id: doc.id, ...doc.data() });
       });
@@ -59,27 +58,24 @@ const Dashboard = () => {
     let orderTotalUPI = 0;
     transaction.length > 0 &&
       transaction.map((val) => {
-        let amount =getAmountByTransaction(val, "UPI");
-        if(amount)
-        orderTotalUPI += amount;
+        let amount = getAmountByTransaction(val, "UPI");
+        if (amount) orderTotalUPI += amount;
       });
     setOrderTotalUPI(orderTotalUPI);
 
     let orderTotalcash = 0;
     transaction.length > 0 &&
       transaction.map((val) => {
-        let amount =getAmountByTransaction(val, "CASH");
-        if(amount)
-        orderTotalcash += amount;
+        let amount = getAmountByTransaction(val, "CASH");
+        if (amount) orderTotalcash += amount;
       });
     setOrderTotalCash(orderTotalcash);
 
     let orderTotalcard = 0;
     transaction.length > 0 &&
       transaction.map((val) => {
-        let amount =getAmountByTransaction(val, "CARD");
-        if(amount)
-        orderTotalcard += amount;
+        let amount = getAmountByTransaction(val, "CARD");
+        if (amount) orderTotalcard += amount;
       });
     setOrderTotalCard(orderTotalcard);
   }, [transaction]);
@@ -147,7 +143,6 @@ const Dashboard = () => {
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
           <Grid item xs={12} md={8}>
-          
             {/* <TotalGrowthBarChart isLoading={isLoading} /> */}
           </Grid>
           <Grid item xs={12} md={4}>

@@ -79,10 +79,9 @@ const TotalOrderLineChartCard = ({ isLoading, transaction, fetchData }) => {
     transaction.length > 0 &&
       transaction.map((val) => {
         let amount = getAmountByTransaction(val);
-        if(amount)
-        orderTotal += amount
+        if (amount) orderTotal += amount;
       });
-     
+
     setOrderTotalValue(orderTotal);
   }, [transaction]);
 
@@ -160,7 +159,10 @@ const TotalOrderLineChartCard = ({ isLoading, transaction, fetchData }) => {
                               mb: 0.75,
                             }}
                           >
-                            ₹{orderTotalValue.toString() === "NaN" ? 0  : orderTotalValue}
+                            ₹
+                            {orderTotalValue.toString() === "NaN"
+                              ? 0
+                              : orderTotalValue}
                           </Typography>
                         ) : (
                           <Typography
@@ -172,7 +174,10 @@ const TotalOrderLineChartCard = ({ isLoading, transaction, fetchData }) => {
                               mb: 0.75,
                             }}
                           >
-                            ₹{orderTotalValue.toString() === "NaN" ? 0  : orderTotalValue}
+                            ₹
+                            {orderTotalValue.toString() === "NaN"
+                              ? 0
+                              : orderTotalValue}
                           </Typography>
                         )}
                       </Grid>

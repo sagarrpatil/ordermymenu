@@ -297,13 +297,8 @@ const CounterMenu = () => {
     <MainCard
       title={"Order & Bill"}
       secondary={
-        <Button
-          size="large"
-          sx={{ background: "orange", color: "#fff" }}
-          disabled={menuStack.length <= 0}
-          onClick={() => setOpen(true)}
-        >
-          Get Bill
+        <Button size="large" onClick={() => navigate(-1)}>
+          Back
         </Button>
       }
     >
