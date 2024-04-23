@@ -97,16 +97,25 @@ const ProfileSection = () => {
   }, [open]);
 
   const shareOption = async () => {
+    let data = JSON.parse(atob(localStorage.getItem("token")));
+    console.log(data);
+    let {
+      user: { providerData, stsTokenManager, ...rest },
+    } = data;
+    let object = {
+      user: rest,
+    };
+    let encypt = btoa(JSON.stringify(object));
     try {
       if (navigator.share) {
         // Use Web Share API if available
         await navigator.share({
           title: "Order My Menu Access",
-          text: `https://ordermymenu.vercel.app/?token=${localStorage.getItem("token")}`,
+          text: `https://ordermymenu.vercel.app/?token=${encypt}`,
         });
       } else {
         window.open(
-          `whatsapp://send?text=https://ordermymenu.vercel.app/?token=${localStorage.getItem("token")}`,
+          `whatsapp://send?text=https://ordermymenu.vercel.app/?token=${encypt}`,
         );
       }
     } catch (error) {
