@@ -45,6 +45,14 @@ const utilities = {
       icon: icons.IconShadow,
       breadcrumbs: false,
     },
+    {
+      id: "icons",
+      title: "Transactions",
+      type: "item",
+      url: "/icons/tabler-icons",
+      icon: icons.IconWindmill,
+      breadcrumbs: false,
+    },
     // {
     //   id: 'icons',
     //   title: 'Icons',
