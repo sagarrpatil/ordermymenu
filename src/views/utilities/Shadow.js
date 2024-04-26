@@ -67,7 +67,7 @@ const ShadowBox = ({
               <br />
               <span>₹ {totalCost}</span>
               <br />
-              {tableTime && timeNow && (
+              {timeNow && tableTime && (
                 <span style={{ fontSize: 12, fontWeight: "200" }}>
                   {" "}
                   {moment(new Date(tableTime)).fromNow()}
