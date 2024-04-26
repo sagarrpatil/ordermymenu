@@ -22,6 +22,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
+import { Grid } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { gridSpacing } from "store/constant";
@@ -55,6 +56,7 @@ const TablerIcons = () => {
   const [fromdate, setFromDate] = React.useState(dayjs(currentTime));
   const [toDate, setToDate] = React.useState(dayjs(currentTime));
   const [tableData, setTableData] = React.useState(null);
+  const [orderTotalValue, setOrderTotalValue] = useState(0);
   useEffect(() => {
     fetchData();
   }, []);
@@ -110,6 +112,25 @@ const TablerIcons = () => {
     setTableData(table);
   }, [fromdate, toDate, transaction]);
 
+  useEffect(() => {
+    let orderTotal = 0;
+    tableData &&
+      tableData.length > 0 &&
+      tableData.map((val) => {
+        let amount = getAmountByTransaction(val);
+        if (amount) orderTotal += amount;
+      });
+
+    setOrderTotalValue(orderTotal);
+  }, [tableData]);
+  const getAmountByTransaction = (data) => {
+    const orderTotal = data.menuStack.reduce(
+      (acc, item) => acc + Number(item.productPrice) * Number(item.quantity),
+      0,
+    );
+    return orderTotal;
+  };
+
   return (
     <MainCard
       title="Sells"
@@ -132,7 +153,18 @@ const TablerIcons = () => {
       }
     >
       <Card sx={{ overflow: "hidden" }}>
-        <TableContainer component={Paper}>
+        {orderTotalValue !== 0 && orderTotalValue.toString() !== "NaN" && (
+          <Grid
+            container
+            justifyContent="space-between"
+            sx={{ background: "#111936" }}
+          >
+            <Grid item sx={{ padding: 2, color: "#fff" }}>
+              Total Collection: <b>₹ {orderTotalValue.toFixed(2)}</b>
+            </Grid>
+          </Grid>
+        )}
+        <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
           <Table aria-label="collapsible table">
             <TableHead>
               <TableRow>
