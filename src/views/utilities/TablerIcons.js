@@ -3,11 +3,11 @@ import React, { useEffect, useState } from "react";
 // project imports
 import MainCard from "ui-component/cards/MainCard";
 import SecondaryAction from "ui-component/cards/CardSecondaryAction";
-import dayjs from 'dayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from "dayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import LinkIcon from "@mui/icons-material/Link";
 
 import PropTypes from "prop-types";
@@ -44,10 +44,10 @@ const TablerIcons = () => {
   const currentTime = Date.now();
   const [fromdate, setFromDate] = React.useState(dayjs(currentTime));
   const [toDate, setToDate] = React.useState(dayjs(currentTime));
+  const [tableData, setTableData] = React.useState(null);
   useEffect(() => {
     fetchData();
   }, []);
-
 
   const fetchData = async () => {
     try {
@@ -68,34 +68,57 @@ const TablerIcons = () => {
   };
   function convertToUnixTimestamp(dateString) {
     const [month, day, year] = dateString.split("-");
-    const dateObj = new Date(year, month - 1, day); 
+    const dateObj = new Date(year, month - 1, day);
     return dateObj.getTime();
   }
-  console.log(convertToUnixTimestamp(moment(fromdate).format("MM-DD-YYYY")))
-  const sortedData =
-    transaction &&
-    transaction.length > 0 &&
-    transaction.sort((a, b) => {
-      const timeA = parseInt(a.billTime);
-      const timeB = parseInt(b.billTime);
-      return timeB - timeA || currentTime - timeB - (currentTime - timeA);
+  function filterTransactionsByDate(transactions, startDate, endDate) {
+    return transactions.filter((transaction) => {
+      const billTime = parseInt(transaction.billTime);
+      return billTime >= startDate && billTime <= endDate;
     });
+  }
+
+  useEffect(() => {
+    const sortedData =
+      transaction &&
+      transaction.length > 0 &&
+      transaction.sort((a, b) => {
+        const timeA = parseInt(a.billTime);
+        const timeB = parseInt(b.billTime);
+        return timeB - timeA || currentTime - timeB - (currentTime - timeA);
+      });
+    let fromDateLong = convertToUnixTimestamp(
+      moment(fromdate.$d).format("MM-DD-YYYY"),
+    );
+    let toDateLong = convertToUnixTimestamp(
+      moment(toDate.$d).add(24, "hours").format("MM-DD-YYYY"),
+    );
+    let table =
+      sortedData &&
+      filterTransactionsByDate(sortedData, fromDateLong, toDateLong);
+    console.log(table);
+    setTableData(table);
+  }, [fromdate, toDate, transaction]);
 
   return (
     <MainCard
-      title="Sells and Transaction"
+      title="Sells"
       secondary={
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoContainer components={['DatePicker', 'DatePicker']}>
-        <DatePicker value={fromdate} label="From Date" defaultValue={dayjs(currentTime)} onChange={(newValue) => setFromDate(newValue)}/>
-        <DatePicker
-          label="To Date"
-          minDate={fromdate}
-          onChange={(newValue) => setToDate(newValue)}
-          value={toDate}
-        />
-      </DemoContainer>
-    </LocalizationProvider>
+          <DemoContainer components={["DatePicker", "DatePicker"]}>
+            <DatePicker
+              value={fromdate}
+              label="From Date"
+              onChange={(newValue) => setFromDate(newValue)}
+            />
+            <DatePicker
+              label="To Date"
+              maxDate={dayjs(currentTime)}
+              onChange={(newValue) => setToDate(newValue)}
+              value={toDate}
+            />
+          </DemoContainer>
+        </LocalizationProvider>
       }
     >
       <Card sx={{ overflow: "hidden" }}>
@@ -103,15 +126,19 @@ const TablerIcons = () => {
           <Table aria-label="collapsible table">
             <TableHead>
               <TableRow>
-                <TableCell />
-                <TableCell>Transaction Time</TableCell>
-                <TableCell align="right">Transaction Amount</TableCell>
-                <TableCell align="right">Payment Mode</TableCell>
+                <TableCell sx={{ padding: 1 }} />
+                <TableCell sx={{ padding: 1 }}>Date</TableCell>
+                <TableCell align="right" sx={{ padding: 1 }}>
+                  Amount
+                </TableCell>
+                <TableCell align="right" sx={{ padding: 1 }}>
+                  Mode
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {sortedData &&
-                sortedData.map((row) => <Row key={row.id} row={row} />)}
+              {tableData &&
+                tableData.map((row) => <Row key={row.id} row={row} />)}
             </TableBody>
           </Table>
         </TableContainer>
@@ -121,7 +148,6 @@ const TablerIcons = () => {
 };
 
 export default TablerIcons;
-
 
 function Row(props) {
   const { row } = props;
@@ -139,17 +165,17 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell component="th" scope="row" sx={{ padding: 1 }}>
           {moment(Number(row.billTime)).format("DD MMM YYYY - hh:mm a")}
         </TableCell>
-        <TableCell align="right">
+        <TableCell align="right" sx={{ padding: 1 }}>
           ₹{" "}
           {row.transaction.reduce(
             (accumulator, currentValue) => accumulator + currentValue.value,
             0,
           )}
         </TableCell>
-        <TableCell align="right">
+        <TableCell align="right" sx={{ padding: 1 }}>
           {row.transaction.map((item) => item.label).join(",")}
         </TableCell>
       </TableRow>
@@ -165,24 +191,26 @@ function Row(props) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Product Name</TableCell>
-                    <TableCell>Product Price vs Quantity</TableCell>
+                    <TableCell sx={{ padding: 1 }}>Product Name</TableCell>
+                    <TableCell sx={{ padding: 1 }}>
+                      Product Price vs Quantity
+                    </TableCell>
 
-                    <TableCell>Total</TableCell>
+                    <TableCell sx={{ padding: 1 }}>Total</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {row.menuStack.map((historyRow) => (
                     <TableRow key={historyRow.id}>
-                      <TableCell component="th" scope="row">
+                      <TableCell component="th" scope="row" sx={{ padding: 1 }}>
                         {historyRow.productName}
                       </TableCell>
-                      <TableCell>
+                      <TableCell sx={{ padding: 1 }}>
                         {" "}
                         {historyRow.productPrice} x {historyRow.quantity}
                       </TableCell>
 
-                      <TableCell>
+                      <TableCell sx={{ padding: 1 }}>
                         {historyRow.productPrice * historyRow.quantity}
                       </TableCell>
                     </TableRow>
@@ -214,4 +242,3 @@ Row.propTypes = {
     protein: PropTypes.number.isRequired,
   }).isRequired,
 };
-
