@@ -216,7 +216,7 @@ function Row(props) {
         <TableCell align="right" sx={{ padding: 1 }}>
           ₹{" "}
           {row.transaction.reduce(
-            (accumulator, currentValue) => accumulator + currentValue.value,
+            (accumulator, currentValue) => accumulator + Number(currentValue.value),
             0,
           )}
         </TableCell>
