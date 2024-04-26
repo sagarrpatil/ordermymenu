@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Card, Grid, TextField } from "@mui/material";
 import MuiTypography from "@mui/material/Typography";
 import SubCard from "ui-component/cards/SubCard";
 import MainCard from "ui-component/cards/MainCard";
+import moment from "moment";
 import {
   collection,
   getDocs,
@@ -24,14 +25,28 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { getDatabase, ref, onValue, once, set } from "@firebase/database";
 // ===============================|| SHADOW BOX ||=============================== //
 
-const ShadowBox = ({ shadow, counterSection, onClick, tableFilled }) => {
+const ShadowBox = ({
+  shadow,
+  counterSection,
+  onClick,
+  tableFilled,
+  tableTime,
+}) => {
   console.log(tableFilled);
+  const [timeNow, setTimeNow] = useState(new Date().getTime());
   const totalCost = tableFilled
     ? tableFilled.reduce((accumulator, product) => {
         const productTotal = product.productPrice * product.quantity;
         return accumulator + productTotal;
       }, 0)
     : 0;
+  useEffect(() => {
+    setInterval(() => {
+      if (tableTime) {
+        setTimeNow(new Date().getTime());
+      }
+    }, 1000);
+  }, []);
   return (
     <Card sx={{ mb: 3, boxShadow: shadow }} onClick={(e) => onClick(e)}>
       <Box
@@ -51,6 +66,13 @@ const ShadowBox = ({ shadow, counterSection, onClick, tableFilled }) => {
             <>
               <br />
               <span>₹ {totalCost}</span>
+              <br />
+              {tableTime && timeNow && (
+                <span style={{ fontSize: 12, fontWeight: "200" }}>
+                  {" "}
+                  {moment(new Date(tableTime)).fromNow()}
+                </span>
+              )}
             </>
           )}
         </Box>
@@ -75,6 +97,7 @@ const UtilitiesShadow = () => {
   const [counterList, setCounterList] = React.useState(JSON.parse(counter));
   const [tableFilled, setTableFilled] = React.useState([]);
   const [upcommingAmont, setupcommingAmont] = React.useState(0);
+  const [tableTime, setTableTime] = React.useState(null);
   const navigate = useNavigate();
   const handleClickOpen = () => {
     setOpen(true);
@@ -102,6 +125,21 @@ const UtilitiesShadow = () => {
           combinedTotals += totalPrice;
         }
         setupcommingAmont(combinedTotals);
+      });
+    } catch (error) {
+      console.error("Error retrieving data:", error);
+    }
+  };
+  const getAllTableTime = async () => {
+    try {
+      const dataRef = ref(
+        realtimeDb,
+        `time/${data.user.email.replace("@", "").replace(".", "")}`,
+      );
+      const unsubscribe = onValue(dataRef, (snapshot) => {
+        const data = snapshot.val();
+        setTableTime(data);
+        console.log(data);
       });
     } catch (error) {
       console.error("Error retrieving data:", error);
@@ -154,6 +192,7 @@ const UtilitiesShadow = () => {
   useEffect(() => {
     fetchData();
     getAllTableData();
+    getAllTableTime();
   }, []);
   const handleClose = () => {
     setOpen(false);
@@ -216,6 +255,11 @@ const UtilitiesShadow = () => {
                       <Grid item xs={12} sm={6} md={4} lg={3}>
                         <ShadowBox
                           tableFilled={tableFilled ? tableFilled[val.id] : null}
+                          tableTime={
+                            tableTime && tableTime[val.id]
+                              ? tableTime[val.id]
+                              : null
+                          }
                           counterSection={val.counterSection}
                           shadow={val.counterNumber}
                           onClick={() =>

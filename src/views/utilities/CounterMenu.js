@@ -104,9 +104,16 @@ const CounterMenu = () => {
         realtimeDb,
         `orders/${data.user.email.replace("@", "").replace(".", "")}/${id}`,
       );
-      const unsubscribe = onValue(dataRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) setMenuStack(data);
+      const unsubscribe = onValue(dataRef, async (snapshot) => {
+        const datas = snapshot.val();
+        if (datas) setMenuStack(datas);
+        else {
+          const timeRef = ref(
+            realtimeDb,
+            `time/${data.user.email.replace("@", "").replace(".", "")}/${id}`,
+          );
+          await set(timeRef, currentTime);
+        }
         // unsubscribe();
       });
     } catch (error) {
@@ -185,7 +192,6 @@ const CounterMenu = () => {
         `orders/${data.user.email.replace("@", "").replace(".", "")}/${id}`,
       );
       await set(dataRef, objData);
-      console.log("Order data written successfully!");
     } catch (error) {
       console.error("Error writing data:", error);
     }
