@@ -1,6 +1,6 @@
 import { Card } from "@mui/material";
 import React, { useEffect, useState } from "react";
-// project imports
+import { styled } from "@mui/material/styles";
 import MainCard from "ui-component/cards/MainCard";
 import SecondaryAction from "ui-component/cards/CardSecondaryAction";
 import dayjs from "dayjs";
@@ -16,7 +16,7 @@ import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -36,6 +36,16 @@ import {
   setDoc,
 } from "@firebase/firestore";
 import moment from "moment";
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
 
 const TablerIcons = () => {
   const data = JSON.parse(atob(localStorage.getItem("token")));
@@ -126,14 +136,14 @@ const TablerIcons = () => {
           <Table aria-label="collapsible table">
             <TableHead>
               <TableRow>
-                <TableCell sx={{ padding: 1 }} />
-                <TableCell sx={{ padding: 1 }}>Date</TableCell>
-                <TableCell align="right" sx={{ padding: 1 }}>
+                <StyledTableCell sx={{ padding: 1 }} />
+                <StyledTableCell sx={{ padding: 1 }}>Date</StyledTableCell>
+                <StyledTableCell align="right" sx={{ padding: 1 }}>
                   Amount
-                </TableCell>
-                <TableCell align="right" sx={{ padding: 1 }}>
+                </StyledTableCell>
+                <StyledTableCell align="right" sx={{ padding: 1 }}>
                   Mode
-                </TableCell>
+                </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -155,8 +165,11 @@ function Row(props) {
 
   return (
     <React.Fragment>
-      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-        <TableCell>
+      <TableRow
+        sx={{ "& > *": { borderBottom: "unset" } }}
+        onClick={() => setOpen(!open)}
+      >
+        <TableCell sx={{ padding: 0 }}>
           <IconButton
             aria-label="expand row"
             size="small"
@@ -192,9 +205,7 @@ function Row(props) {
                 <TableHead>
                   <TableRow>
                     <TableCell sx={{ padding: 1 }}>Product Name</TableCell>
-                    <TableCell sx={{ padding: 1 }}>
-                      Product Price vs Quantity
-                    </TableCell>
+                    <TableCell sx={{ padding: 1 }}>Price vs Quantity</TableCell>
 
                     <TableCell sx={{ padding: 1 }}>Total</TableCell>
                   </TableRow>
