@@ -118,11 +118,11 @@ const TablerIcons = () => {
           <DemoContainer components={["DatePicker", "DatePicker"]}>
             <DatePicker
               value={fromdate}
-              label="From Date"
+              label="Start Date"
               onChange={(newValue) => setFromDate(newValue)}
             />
             <DatePicker
-              label="To Date"
+              label="End Date"
               maxDate={dayjs(currentTime)}
               onChange={(newValue) => setToDate(newValue)}
               value={toDate}
