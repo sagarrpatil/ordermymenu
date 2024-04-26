@@ -3,8 +3,11 @@ import React, { useEffect, useState } from "react";
 // project imports
 import MainCard from "ui-component/cards/MainCard";
 import SecondaryAction from "ui-component/cards/CardSecondaryAction";
-
-// assets
+import dayjs from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import LinkIcon from "@mui/icons-material/Link";
 
 import PropTypes from "prop-types";
@@ -38,10 +41,14 @@ const TablerIcons = () => {
   const data = JSON.parse(atob(localStorage.getItem("token")));
   const [transaction, setTransaction] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const currentTime = Date.now();
+  const [fromdate, setFromDate] = React.useState(dayjs(currentTime));
+  const [toDate, setToDate] = React.useState(dayjs(currentTime));
   useEffect(() => {
     fetchData();
   }, []);
-  const currentTime = Date.now();
+
+
   const fetchData = async () => {
     try {
       const userDocRef = doc(db, data.user.email, "transaction");
@@ -59,7 +66,12 @@ const TablerIcons = () => {
       console.error("Error fetching data:", error);
     }
   };
-
+  function convertToUnixTimestamp(dateString) {
+    const [month, day, year] = dateString.split("-");
+    const dateObj = new Date(year, month - 1, day); 
+    return dateObj.getTime();
+  }
+  console.log(convertToUnixTimestamp(moment(fromdate).format("MM-DD-YYYY")))
   const sortedData =
     transaction &&
     transaction.length > 0 &&
@@ -73,7 +85,17 @@ const TablerIcons = () => {
     <MainCard
       title="Sells and Transaction"
       secondary={
-        <SecondaryAction icon={<LinkIcon fontSize="small" />} link="" />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DemoContainer components={['DatePicker', 'DatePicker']}>
+        <DatePicker value={fromdate} label="From Date" defaultValue={dayjs(currentTime)} onChange={(newValue) => setFromDate(newValue)}/>
+        <DatePicker
+          label="To Date"
+          minDate={fromdate}
+          onChange={(newValue) => setToDate(newValue)}
+          value={toDate}
+        />
+      </DemoContainer>
+    </LocalizationProvider>
       }
     >
       <Card sx={{ overflow: "hidden" }}>
@@ -100,28 +122,6 @@ const TablerIcons = () => {
 
 export default TablerIcons;
 
-function createData(name, calories, fat, carbs, protein, price) {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    price,
-    history: [
-      {
-        date: "2020-01-05",
-        customerId: "11091700",
-        amount: 3,
-      },
-      {
-        date: "2020-01-02",
-        customerId: "Anonymous",
-        amount: 1,
-      },
-    ],
-  };
-}
 
 function Row(props) {
   const { row } = props;
@@ -215,10 +215,3 @@ Row.propTypes = {
   }).isRequired,
 };
 
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0, 3.99),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3, 4.99),
-  createData("Eclair", 262, 16.0, 24, 6.0, 3.79),
-  createData("Cupcake", 305, 3.7, 67, 4.3, 2.5),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, 1.5),
-];
