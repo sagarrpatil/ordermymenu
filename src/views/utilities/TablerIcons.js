@@ -9,6 +9,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import LinkIcon from "@mui/icons-material/Link";
+import TablePagination from "@mui/material/TablePagination";
 
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
@@ -57,6 +58,19 @@ const TablerIcons = () => {
   const [toDate, setToDate] = React.useState(dayjs(currentTime));
   const [tableData, setTableData] = React.useState(null);
   const [orderTotalValue, setOrderTotalValue] = useState(0);
+
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(25);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -144,6 +158,7 @@ const TablerIcons = () => {
             />
             <DatePicker
               label="End Date"
+              minDate={fromdate}
               maxDate={dayjs(currentTime)}
               onChange={(newValue) => setToDate(newValue)}
               value={toDate}
@@ -164,8 +179,11 @@ const TablerIcons = () => {
             </Grid>
           </Grid>
         )}
-        <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
-          <Table aria-label="collapsible table">
+        <TableContainer
+          component={Paper}
+          sx={{ borderRadius: 0, maxHeight: 440 }}
+        >
+          <Table aria-label="collapsible table" stickyHeader>
             <TableHead>
               <TableRow>
                 <StyledTableCell sx={{ padding: 1 }} />
@@ -180,10 +198,23 @@ const TablerIcons = () => {
             </TableHead>
             <TableBody>
               {tableData &&
-                tableData.map((row) => <Row key={row.id} row={row} />)}
+                tableData
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => <Row key={row.id} row={row} />)}
             </TableBody>
           </Table>
         </TableContainer>
+        {tableData && (
+          <TablePagination
+            rowsPerPageOptions={[25, 250, 1000]}
+            component="div"
+            count={tableData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        )}
       </Card>
     </MainCard>
   );
@@ -216,7 +247,8 @@ function Row(props) {
         <TableCell align="right" sx={{ padding: 1 }}>
           ₹{" "}
           {row.transaction.reduce(
-            (accumulator, currentValue) => accumulator + Number(currentValue.value),
+            (accumulator, currentValue) =>
+              accumulator + Number(currentValue.value),
             0,
           )}
         </TableCell>

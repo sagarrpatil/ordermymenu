@@ -47,7 +47,7 @@ const utilities = {
     },
     {
       id: "icons",
-      title: "Transactions",
+      title: "Sells Transaction",
       type: "item",
       url: "/icons/tabler-icons",
       icon: icons.IconWindmill,
