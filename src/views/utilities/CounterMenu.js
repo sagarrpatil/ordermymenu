@@ -224,9 +224,25 @@ const CounterMenu = () => {
         `orders/${data.user.email.replace("@", "").replace(".", "")}/${id}`,
       );
       await set(dataRef, null);
+
+
+      const currentTimes = Math.floor(now.getTime());
+      const dataRefs = ref(
+        realtimeDb,
+        `transaction/${data.user.uid}/${currentTimes}`,
+      );
+      await set(dataRefs, newObject);
       navigate("/utils/Counter");
+
     } catch (error) {
       setIsLoading(false);
+      const currentTimes = Math.floor(now.getTime());
+      const dataRefs = ref(
+        realtimeDb,
+        `transaction/${data.user.uid}/${currentTimes}`,
+      );
+      await set(dataRefs, newObject);
+      navigate("/utils/Counter");
       console.error("Error fetching data:", error);
     }
   };
