@@ -28,6 +28,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { gridSpacing } from "store/constant";
 import { db, realtimeDb } from "../../firebase";
+import { getDatabase, ref, onValue, once, set } from "@firebase/database";
 import {
   collection,
   getDocs,
@@ -89,6 +90,22 @@ const TablerIcons = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
+
+      const dataRefs = ref(
+        realtimeDb,
+        `transaction/${data.user.uid}`,
+      );
+      const unsubscribe = onValue(dataRefs, (snapshot) => { 
+        let value = snapshot.val();
+        const items = [];
+        Object.keys(value).map(id=>{
+          items.push({ id: id, ...value[id] });
+        })
+        setTransaction(items);
+        console.log(items);
+
+      })
+
       console.error("Error fetching data:", error);
     }
   };
