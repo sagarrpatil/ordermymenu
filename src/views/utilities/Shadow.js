@@ -48,7 +48,10 @@ const ShadowBox = ({
     }, 1000);
   }, []);
   return (
-    <Card sx={{ mb: 3, boxShadow: shadow }} onClick={(e) => onClick(e)}>
+    <Card
+      sx={{ mb: 3, boxShadow: shadow, height: 100 }}
+      onClick={(e) => onClick(e)}
+    >
       <Box
         sx={{
           display: "flex",
@@ -60,17 +63,22 @@ const ShadowBox = ({
           cursor: "pointer",
         }}
       >
-        <Box sx={{ color: "inherit", fontWeight: 800, textAlign: "center" }}>
-          Table: {shadow}
+        <Box
+          sx={{ color: "inherit", fontWeight: 800, textAlign: "center" }}
+          style={{ paddingTop: -14 }}
+        >
+          <b style={{ fontSize: 16 }}>{shadow}</b>
           {tableFilled && (
             <>
               <br />
-              <span>₹ {totalCost}</span>
+              <span style={{ color: "green" }}>₹ {totalCost}</span>
               <br />
               {timeNow && tableTime && (
-                <span style={{ fontSize: 12, fontWeight: "200" }}>
+                <span style={{ fontSize: 10, fontWeight: "200" }}>
                   {" "}
-                  {moment(new Date(tableTime)).fromNow()}
+                  {moment(new Date(tableTime))
+                    .fromNow()
+                    .replace("minutes", "min")}
                 </span>
               )}
             </>
@@ -252,7 +260,7 @@ const UtilitiesShadow = () => {
                   {section
                     .sort((a, b) => a.counterNumber - b.counterNumber)
                     .map((val) => (
-                      <Grid item xs={12} sm={6} md={4} lg={3}>
+                      <Grid item xs={6} sm={6} md={2} lg={2}>
                         <ShadowBox
                           tableFilled={tableFilled ? tableFilled[val.id] : null}
                           tableTime={
