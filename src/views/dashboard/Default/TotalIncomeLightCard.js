@@ -89,7 +89,7 @@ const TotalIncomeLightCard = ({ isLoading, orderTotalUPI, type }) => {
                         mt: 0.5,
                       }}
                     >
-                      {type} Collection
+                      {type}
                     </Typography>
                   }
                 />

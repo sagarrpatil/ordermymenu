@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 // material-ui
 import { Grid } from "@mui/material";
 
-// project imports
+import { getDatabase, ref, onValue, once, set } from "@firebase/database";
 import EarningCard from "./EarningCard";
 import PopularCard from "./PopularCard";
 import TotalOrderLineChartCard from "./TotalOrderLineChartCard";
@@ -50,6 +50,21 @@ const Dashboard = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
+      const dataRefs = ref(
+        realtimeDb,
+        `transaction/${data.user.uid}`,
+      );
+      const unsubscribe = onValue(dataRefs, (snapshot) => { 
+        let value = snapshot.val();
+        const items = [];
+        Object.keys(value).map(id=>{
+          items.push({ id: id, ...value[id] });
+        })
+        setTimeSet(time);
+        setTransaction(items);
+        console.log(items);
+
+      })
       console.error("Error fetching data:", error);
     }
   };
