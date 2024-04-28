@@ -50,21 +50,17 @@ const Dashboard = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      const dataRefs = ref(
-        realtimeDb,
-        `transaction/${data.user.uid}`,
-      );
-      const unsubscribe = onValue(dataRefs, (snapshot) => { 
+      const dataRefs = ref(realtimeDb, `transaction/${data.user.uid}`);
+      const unsubscribe = onValue(dataRefs, (snapshot) => {
         let value = snapshot.val();
         const items = [];
-        Object.keys(value).map(id=>{
+        Object.keys(value).map((id) => {
           items.push({ id: id, ...value[id] });
-        })
+        });
         setTimeSet(time);
         setTransaction(items);
         console.log(items);
-
-      })
+      });
       console.error("Error fetching data:", error);
     }
   };
@@ -157,12 +153,11 @@ const Dashboard = () => {
       </Grid>
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={4}>
+            <PopularCard isLoading={isLoading} transaction={transaction} />
             {/* <TotalGrowthBarChart isLoading={isLoading} /> */}
           </Grid>
-          <Grid item xs={12} md={4}>
-            {/* <PopularCard  isLoading={isLoading} /> */}
-          </Grid>
+          <Grid item xs={12} md={4}></Grid>
         </Grid>
       </Grid>
     </Grid>

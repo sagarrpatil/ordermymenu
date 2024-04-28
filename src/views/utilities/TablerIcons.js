@@ -91,20 +91,16 @@ const TablerIcons = () => {
     } catch (error) {
       setLoading(false);
 
-      const dataRefs = ref(
-        realtimeDb,
-        `transaction/${data.user.uid}`,
-      );
-      const unsubscribe = onValue(dataRefs, (snapshot) => { 
+      const dataRefs = ref(realtimeDb, `transaction/${data.user.uid}`);
+      const unsubscribe = onValue(dataRefs, (snapshot) => {
         let value = snapshot.val();
         const items = [];
-        Object.keys(value).map(id=>{
+        Object.keys(value).map((id) => {
           items.push({ id: id, ...value[id] });
-        })
+        });
         setTransaction(items);
         console.log(items);
-
-      })
+      });
 
       console.error("Error fetching data:", error);
     }

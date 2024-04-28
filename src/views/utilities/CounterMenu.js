@@ -225,7 +225,6 @@ const CounterMenu = () => {
       );
       await set(dataRef, null);
 
-
       const currentTimes = Math.floor(now.getTime());
       const dataRefs = ref(
         realtimeDb,
@@ -233,7 +232,6 @@ const CounterMenu = () => {
       );
       await set(dataRefs, newObject);
       navigate("/utils/Counter");
-
     } catch (error) {
       setIsLoading(false);
       const currentTimes = Math.floor(now.getTime());
