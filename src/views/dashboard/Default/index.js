@@ -37,19 +37,16 @@ const Dashboard = () => {
 
   const fetchData = async (time) => {
     try {
-      const userDocRef = doc(db, data.user.email, "transaction");
-      const menuItemsCollectionRef = collection(userDocRef, "transaction");
-      const querySnapshot = await getDocs(menuItemsCollectionRef);
-      const items = [];
-      setTimeSet(time);
-      querySnapshot.forEach((doc) => {
-        items.push({ id: doc.id, ...doc.data() });
-      });
-      setTransaction(items);
+      // const userDocRef = doc(db, data.user.email, "transaction");
+      // const menuItemsCollectionRef = collection(userDocRef, "transaction");
+      // const querySnapshot = await getDocs(menuItemsCollectionRef);
+      // const items = [];
+      // setTimeSet(time);
+      // querySnapshot.forEach((doc) => {
+      //   items.push({ id: doc.id, ...doc.data() });
+      // });
+      // setTransaction(items);
       // console.log("items", items);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
       const dataRefs = ref(realtimeDb, `transaction/${data.user.uid}`);
       const unsubscribe = onValue(dataRefs, (snapshot) => {
         let value = snapshot.val();
@@ -61,6 +58,10 @@ const Dashboard = () => {
         setTransaction(items);
         console.log(items);
       });
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+
       console.error("Error fetching data:", error);
     }
   };

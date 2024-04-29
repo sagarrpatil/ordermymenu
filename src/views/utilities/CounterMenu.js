@@ -216,15 +216,21 @@ const CounterMenu = () => {
       billTime: currentTime.toString(),
     };
     try {
-      const userDocRef = doc(db, data.user.email, "transaction"); // Replace with your collection name
-      const menuItemsCollectionRef = collection(userDocRef, "transaction");
-      await addDoc(menuItemsCollectionRef, newObject);
-      const dataRef = ref(
-        realtimeDb,
-        `orders/${data.user.email.replace("@", "").replace(".", "")}/${id}`,
-      );
-      await set(dataRef, null);
+      // const userDocRef = doc(db, data.user.email, "transaction"); // Replace with your collection name
+      // const menuItemsCollectionRef = collection(userDocRef, "transaction");
+      // await addDoc(menuItemsCollectionRef, newObject);
+      // const dataRef = ref(
+      //   realtimeDb,
+      //   `orders/${data.user.email.replace("@", "").replace(".", "")}/${id}`,
+      // );
+      // await set(dataRef, null);
 
+      // const currentTimes = Math.floor(now.getTime());
+      // const dataRefs = ref(
+      //   realtimeDb,
+      //   `transaction/${data.user.uid}/${currentTimes}`,
+      // );
+      // await set(dataRefs, newObject);
       const currentTimes = Math.floor(now.getTime());
       const dataRefs = ref(
         realtimeDb,
@@ -234,13 +240,7 @@ const CounterMenu = () => {
       navigate("/utils/Counter");
     } catch (error) {
       setIsLoading(false);
-      const currentTimes = Math.floor(now.getTime());
-      const dataRefs = ref(
-        realtimeDb,
-        `transaction/${data.user.uid}/${currentTimes}`,
-      );
-      await set(dataRefs, newObject);
-      navigate("/utils/Counter");
+
       console.error("Error fetching data:", error);
     }
   };
