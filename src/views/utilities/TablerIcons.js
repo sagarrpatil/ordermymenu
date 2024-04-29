@@ -78,15 +78,25 @@ const TablerIcons = () => {
 
   const fetchData = async () => {
     try {
-      const userDocRef = doc(db, data.user.email, "transaction");
-      const menuItemsCollectionRef = collection(userDocRef, "transaction");
-      const querySnapshot = await getDocs(menuItemsCollectionRef);
-      const items = [];
-      querySnapshot.forEach((doc) => {
-        items.push({ id: doc.id, ...doc.data() });
+      // const userDocRef = doc(db, data.user.email, "transaction");
+      // const menuItemsCollectionRef = collection(userDocRef, "transaction");
+      // const querySnapshot = await getDocs(menuItemsCollectionRef);
+      // const items = [];
+      // querySnapshot.forEach((doc) => {
+      //   items.push({ id: doc.id, ...doc.data() });
+      // });
+      // setTransaction(items);
+      // console.log("items", items);
+      const dataRefs = ref(realtimeDb, `transaction/${data.user.uid}`);
+      const unsubscribe = onValue(dataRefs, (snapshot) => {
+        let value = snapshot.val();
+        const items = [];
+        Object.keys(value).map((id) => {
+          items.push({ id: id, ...value[id] });
+        });
+        setTransaction(items);
+        console.log(items);
       });
-      setTransaction(items);
-      console.log("items", items);
       setLoading(false);
     } catch (error) {
       setLoading(false);
