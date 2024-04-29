@@ -73,113 +73,116 @@ const PopularCard = ({ isLoading, transaction }) => {
       {isLoading ? (
         <SkeletonPopularCard />
       ) : (
-        <MainCard content={false}>
-          <CardContent>
-            <Grid container spacing={gridSpacing}>
-              <Grid item xs={12}>
-                <Grid
-                  container
-                  alignContent="center"
-                  justifyContent="space-between"
-                >
-                  <Grid item>
-                    <Typography variant="h4">
-                      Popular Items ({timeSet.toUpperCase()})
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <MoreHorizOutlinedIcon
-                      fontSize="small"
-                      sx={{
-                        color: theme.palette.primary[200],
-                        cursor: "pointer",
-                      }}
-                      aria-controls="menu-popular-card"
-                      aria-haspopup="true"
-                      onClick={handleClick}
-                    />
-                    <Menu
-                      id="menu-popular-card"
-                      anchorEl={anchorEl}
-                      keepMounted
-                      open={Boolean(anchorEl)}
-                      onClose={handleClose}
-                      variant="selectedMenu"
-                      anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "right",
-                      }}
-                      transformOrigin={{
-                        vertical: "top",
-                        horizontal: "right",
-                      }}
-                    >
-                      <MenuItem onClick={() => setTimeSet("day")}>
-                        Today
-                      </MenuItem>
-                      <MenuItem onClick={() => setTimeSet("month")}>
-                        This Month
-                      </MenuItem>
-                      <MenuItem onClick={() => setTimeSet("year")}>
-                        This Year
-                      </MenuItem>
-                    </Menu>
+        data &&
+        data.length > 0 && (
+          <MainCard content={false}>
+            <CardContent>
+              <Grid container spacing={gridSpacing}>
+                <Grid item xs={12}>
+                  <Grid
+                    container
+                    alignContent="center"
+                    justifyContent="space-between"
+                  >
+                    <Grid item>
+                      <Typography variant="h4">
+                        Popular Items ({timeSet.toUpperCase()})
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <MoreHorizOutlinedIcon
+                        fontSize="small"
+                        sx={{
+                          color: theme.palette.primary[200],
+                          cursor: "pointer",
+                        }}
+                        aria-controls="menu-popular-card"
+                        aria-haspopup="true"
+                        onClick={handleClick}
+                      />
+                      <Menu
+                        id="menu-popular-card"
+                        anchorEl={anchorEl}
+                        keepMounted
+                        open={Boolean(anchorEl)}
+                        onClose={handleClose}
+                        variant="selectedMenu"
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "right",
+                        }}
+                      >
+                        <MenuItem onClick={() => setTimeSet("day")}>
+                          Today
+                        </MenuItem>
+                        <MenuItem onClick={() => setTimeSet("month")}>
+                          This Month
+                        </MenuItem>
+                        <MenuItem onClick={() => setTimeSet("year")}>
+                          This Year
+                        </MenuItem>
+                      </Menu>
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
 
-              <Grid item xs={12} style={{ maxHeight: 400, overflow: "auto" }}>
-                {data &&
-                  data.length > 0 &&
-                  data.map((val) => (
-                    <>
-                      <Grid container direction="column">
-                        <Grid item>
-                          <Grid
-                            container
-                            alignItems="center"
-                            justifyContent="space-between"
-                          >
-                            <Grid item>
-                              <Typography variant="subtitle1" color="inherit">
-                                {val.itemName}
-                              </Typography>
-                            </Grid>
-                            <Grid item>
-                              <Grid
-                                container
-                                alignItems="center"
-                                justifyContent="space-between"
-                              >
-                                <Grid item>
-                                  <Typography
-                                    variant="subtitle1"
-                                    color="inherit"
-                                  >
-                                    Qty: {val.quantity}
-                                  </Typography>
+                <Grid item xs={12} style={{ maxHeight: 400, overflow: "auto" }}>
+                  {data &&
+                    data.length > 0 &&
+                    data.map((val) => (
+                      <>
+                        <Grid container direction="column">
+                          <Grid item>
+                            <Grid
+                              container
+                              alignItems="center"
+                              justifyContent="space-between"
+                            >
+                              <Grid item>
+                                <Typography variant="subtitle1" color="inherit">
+                                  {val.itemName}
+                                </Typography>
+                              </Grid>
+                              <Grid item>
+                                <Grid
+                                  container
+                                  alignItems="center"
+                                  justifyContent="space-between"
+                                >
+                                  <Grid item>
+                                    <Typography
+                                      variant="subtitle1"
+                                      color="inherit"
+                                    >
+                                      Qty: {val.quantity}
+                                    </Typography>
+                                  </Grid>
+                                  <Grid item></Grid>
                                 </Grid>
-                                <Grid item></Grid>
                               </Grid>
                             </Grid>
                           </Grid>
+                          <Grid item>
+                            <Typography
+                              variant="subtitle2"
+                              sx={{ color: "success.dark" }}
+                            >
+                              {/* 10% Profit */}
+                            </Typography>
+                          </Grid>
                         </Grid>
-                        <Grid item>
-                          <Typography
-                            variant="subtitle2"
-                            sx={{ color: "success.dark" }}
-                          >
-                            {/* 10% Profit */}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                      <Divider sx={{ my: 1.5 }} />
-                    </>
-                  ))}
+                        <Divider sx={{ my: 1.5 }} />
+                      </>
+                    ))}
+                </Grid>
               </Grid>
-            </Grid>
-          </CardContent>
-        </MainCard>
+            </CardContent>
+          </MainCard>
+        )
       )}
     </>
   );
