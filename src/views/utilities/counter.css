@@ -120,3 +120,8 @@ tfoot tr:first-child td:last-child {
   text-align: center;
   text-transform: uppercase;
 }
+@media print {
+  .billHide {
+    display: none !important;
+  }
+}

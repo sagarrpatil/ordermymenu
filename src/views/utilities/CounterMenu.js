@@ -10,7 +10,7 @@ import {
   Fab,
   Divider,
 } from "@mui/material";
-import React from "react";
+import React, { useRef } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import Autocomplete from "@mui/material/Autocomplete";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -94,7 +94,7 @@ const CounterMenu = () => {
       value: null,
     },
   ]);
-
+  const containerRef = useRef(null);
   const now = new Date();
   const currentTime = Math.floor(now.getTime());
 
@@ -313,7 +313,9 @@ const CounterMenu = () => {
     setMenuListType(menuData);
     localStorage.setItem("TMLT", btoa(JSON.stringify(menuData)));
   };
-
+  const printContainer = () => {
+    window.print();
+  };
   return (
     <MainCard
       title={"Order & Bill"}
@@ -525,13 +527,14 @@ const CounterMenu = () => {
       >
         <DialogTitle
           id="alert-dialog-title"
+          className="billHide"
           style={{ fontSize: 16, width: 250 }}
         >
           Bill Payment
         </DialogTitle>
         <DialogContent style={{ background: "#e3e3e3" }}>
           <DialogContentText id="alert-dialog-description">
-            <h3>Mode of Payment</h3>
+            <h3 className="billHide">Mode of Payment</h3>
 
             <Grid
               container
@@ -539,14 +542,14 @@ const CounterMenu = () => {
               style={{ paddingTop: 10, background: "#fff", paddingBottom: 10 }}
             >
               {err && (
-                <Grid item xs={12}>
+                <Grid item xs={12} className="billHide">
                   <b style={{ color: "red" }}>
                     {err} * <br />
                   </b>
                 </Grid>
               )}
 
-              <Grid item xs={12}>
+              <Grid item xs={12} className="billHide">
                 <FormGroup>
                   {transactionMode.map((val, i) => (
                     <Grid container>
@@ -581,7 +584,7 @@ const CounterMenu = () => {
               </Grid>
             </Grid>
 
-            <div class="container">
+            <div class="container" ref={containerRef}>
               <div class="receipt_header">
                 <h1>
                   <span>Durga Cafe</span>
@@ -647,8 +650,11 @@ const CounterMenu = () => {
             </div>
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions className="billHide">
           <Button onClick={handleClose}>Close</Button>
+          <Button onClick={printContainer} sx={{ background: "orange" }}>
+            Print Bill
+          </Button>
           <Button
             onClick={handleSubmit}
             autoFocus
