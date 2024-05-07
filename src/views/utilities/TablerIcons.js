@@ -39,6 +39,7 @@ import {
   setDoc,
 } from "@firebase/firestore";
 import moment from "moment";
+import PouchDB from "pouchdb";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -53,13 +54,14 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 const TablerIcons = () => {
   const data = JSON.parse(atob(localStorage.getItem("token")));
   const [transaction, setTransaction] = useState([]);
+  const dbTransaction = new PouchDB("transaction");
   const [isLoading, setLoading] = useState(true);
   const currentTime = Date.now();
   const [fromdate, setFromDate] = React.useState(dayjs(currentTime));
   const [toDate, setToDate] = React.useState(dayjs(currentTime));
   const [tableData, setTableData] = React.useState(null);
   const [orderTotalValue, setOrderTotalValue] = useState(0);
-
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
@@ -75,18 +77,22 @@ const TablerIcons = () => {
   useEffect(() => {
     fetchData();
   }, []);
+  useEffect(() => {
+    const handleOnlineStatusChange = () => {
+      setIsOnline(navigator.onLine);
+    };
+    window.addEventListener("online", handleOnlineStatusChange);
+    window.addEventListener("offline", handleOnlineStatusChange);
+
+    return () => {
+      window.removeEventListener("online", handleOnlineStatusChange);
+      window.removeEventListener("offline", handleOnlineStatusChange);
+    };
+  }, []);
 
   const fetchData = async () => {
+    if (isOnline) {
     try {
-      // const userDocRef = doc(db, data.user.email, "transaction");
-      // const menuItemsCollectionRef = collection(userDocRef, "transaction");
-      // const querySnapshot = await getDocs(menuItemsCollectionRef);
-      // const items = [];
-      // querySnapshot.forEach((doc) => {
-      //   items.push({ id: doc.id, ...doc.data() });
-      // });
-      // setTransaction(items);
-      // console.log("items", items);
       const dataRefs = ref(realtimeDb, `transaction/${data.user.uid}`);
       const unsubscribe = onValue(dataRefs, (snapshot) => {
         let value = snapshot.val();
@@ -113,7 +119,25 @@ const TablerIcons = () => {
       });
 
       console.error("Error fetching data:", error);
+    } }
+    else {
+      dbTransaction
+        .get("0")
+        .then((latestDoc) => {
+          setLoading(false);
+          setTransaction(latestDoc.items);
+          console.log(
+            "Document retrieved successfully:",
+            latestDoc,
+            latestDoc.items,
+          );
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.error("Error retrieving document:", err);
+        });
     }
+
   };
   function convertToUnixTimestamp(dateString) {
     const [month, day, year] = dateString.split("-");
