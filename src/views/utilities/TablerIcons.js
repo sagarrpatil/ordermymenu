@@ -92,35 +92,35 @@ const TablerIcons = () => {
 
   const fetchData = async () => {
     if (isOnline) {
-    try {
-      const dataRefs = ref(realtimeDb, `transaction/${data.user.uid}`);
-      const unsubscribe = onValue(dataRefs, (snapshot) => {
-        let value = snapshot.val();
-        const items = [];
-        Object.keys(value).map((id) => {
-          items.push({ id: id, ...value[id] });
+      try {
+        const dataRefs = ref(realtimeDb, `transaction/${data.user.uid}`);
+        const unsubscribe = onValue(dataRefs, (snapshot) => {
+          let value = snapshot.val();
+          const items = [];
+          Object.keys(value).map((id) => {
+            items.push({ id: id, ...value[id] });
+          });
+          setTransaction(items);
+          console.log(items);
         });
-        setTransaction(items);
-        console.log(items);
-      });
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
 
-      const dataRefs = ref(realtimeDb, `transaction/${data.user.uid}`);
-      const unsubscribe = onValue(dataRefs, (snapshot) => {
-        let value = snapshot.val();
-        const items = [];
-        Object.keys(value).map((id) => {
-          items.push({ id: id, ...value[id] });
+        const dataRefs = ref(realtimeDb, `transaction/${data.user.uid}`);
+        const unsubscribe = onValue(dataRefs, (snapshot) => {
+          let value = snapshot.val();
+          const items = [];
+          Object.keys(value).map((id) => {
+            items.push({ id: id, ...value[id] });
+          });
+          setTransaction(items);
+          console.log(items);
         });
-        setTransaction(items);
-        console.log(items);
-      });
 
-      console.error("Error fetching data:", error);
-    } }
-    else {
+        console.error("Error fetching data:", error);
+      }
+    } else {
       dbTransaction
         .get("0")
         .then((latestDoc) => {
@@ -137,7 +137,6 @@ const TablerIcons = () => {
           console.error("Error retrieving document:", err);
         });
     }
-
   };
   function convertToUnixTimestamp(dateString) {
     const [month, day, year] = dateString.split("-");
