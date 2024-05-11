@@ -296,6 +296,7 @@ const CounterMenu = () => {
         items.push(doc.data().type);
       });
       let val = [...new Set(items)].sort();
+      val.unshift("Favorite");
       setTypeOfProducts(val);
       localStorage.setItem("TOP", btoa(JSON.stringify(val)));
       setSectionSelected(val[0]);
@@ -372,8 +373,10 @@ const CounterMenu = () => {
             {menuList &&
               menuList.length > 0 &&
               menuList
-                .filter(
-                  (item) => item.productType === TypeOfProducts[valueOfTab],
+                .filter((item) =>
+                  TypeOfProducts[valueOfTab] === "Favorite"
+                    ? item.fav
+                    : item.productType === TypeOfProducts[valueOfTab],
                 )
                 .filter((item) => {
                   return !menuStack.some(
