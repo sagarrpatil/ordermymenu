@@ -343,7 +343,11 @@ const CounterMenu = () => {
             onChange={handleChangeTab}
             indicatorColor="secondary"
             textColor="inherit"
-            sx={{ backgroundColor: "#ffb554" }}
+            sx={{
+              backgroundColor: "#ffb554",
+              maxHeight: "71vh",
+              overflow: "scroll",
+            }}
             orientation={isSmallScreen ? "horizontal" : "vertical"}
             variant="scrollable"
             scrollButtons="auto"
@@ -367,7 +371,11 @@ const CounterMenu = () => {
             scrollButtons="auto"
             indicatorColor="secondary"
             textColor="#000"
-            sx={{ backgroundColor: "#f2d4ac" }}
+            sx={{
+              backgroundColor: "#f2d4ac",
+              maxHeight: "71vh",
+              overflow: "scroll",
+            }}
             aria-label="scrollable auto tabs example"
           >
             {menuList &&
