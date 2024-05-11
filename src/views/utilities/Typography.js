@@ -4,9 +4,12 @@ import React, { useEffect } from "react";
 // project imports
 import SubCard from "ui-component/cards/SubCard";
 import MainCard from "ui-component/cards/MainCard";
-import SecondaryAction from "ui-component/cards/CardSecondaryAction";
+import { pink } from "@mui/material/colors";
 import { gridSpacing } from "store/constant";
-
+import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Favorite from "@mui/icons-material/Favorite";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -49,6 +52,7 @@ const Typography = () => {
   const [productType, setProductType] = React.useState("");
   const [productName, setProductName] = React.useState("");
   const [productPrice, setProductPrice] = React.useState("");
+  const [fav, setFav] = React.useState(false);
   let TMLT = localStorage.getItem("TMLT")
     ? JSON.parse(atob(localStorage.getItem("TMLT")))
     : [];
@@ -106,6 +110,7 @@ const Typography = () => {
       setProductType(obj.productType);
       setProductName(obj.productName);
       setProductPrice(obj.productPrice);
+      setFav(obj.fav ? obj.fav : false);
       setOpen(true);
     }
   }, [obj]);
@@ -116,6 +121,7 @@ const Typography = () => {
     setProductType("");
     setProductName("");
     setProductPrice("");
+    setFav(false);
     setError("");
   };
   const handleMenuClose = () => {
@@ -161,6 +167,7 @@ const Typography = () => {
       productName: productName,
       productPrice: Number(productPrice),
       active: true,
+      fav: fav,
     };
     if (
       productPrice !== "" &&
@@ -409,6 +416,25 @@ const Typography = () => {
               sx={{ width: 250 }}
             />{" "}
             <br />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={fav}
+                  onChange={(event) => {
+                    setFav(event.target.checked);
+                  }}
+                  icon={<FavoriteBorder />}
+                  checkedIcon={<Favorite />}
+                  sx={{
+                    color: pink[800],
+                    "&.Mui-checked": {
+                      color: pink[600],
+                    },
+                  }}
+                />
+              }
+              label="Add in Favorite"
+            />
             <br />
           </DialogContentText>
         </DialogContent>
