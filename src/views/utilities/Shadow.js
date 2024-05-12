@@ -49,9 +49,34 @@ const ShadowBox = ({
   }, []);
   return (
     <Card
-      sx={{ mb: 3, boxShadow: shadow, height: 100 }}
+      sx={{
+        mb: 3,
+        boxShadow: shadow,
+        height: 100,
+        bgcolor: tableFilled ? "#FFBD98" : "#F3FFCE",
+      }}
       onClick={(e) => onClick(e)}
     >
+      <div
+        style={{
+          display: "flex",
+          cursor: "pointer",
+          position: "absolute",
+        }}
+      >
+        <center style={{ padding: 10 }}>
+          <img
+            src={require(
+              tableFilled
+                ? "../../assets/images/FillChair.png"
+                : "../../assets/images/EmptyCheer.png",
+            )}
+            width={30}
+          />
+        </center>
+        <br />
+      </div>
+
       <Box
         sx={{
           display: "flex",
@@ -67,7 +92,8 @@ const ShadowBox = ({
           sx={{ color: "inherit", fontWeight: 800, textAlign: "center" }}
           style={{ paddingTop: -14 }}
         >
-          <b style={{ fontSize: 16 }}>{shadow}</b>
+          <b style={{ fontSize: 18 }}>{shadow}</b>
+
           {tableFilled && (
             <>
               <br />
