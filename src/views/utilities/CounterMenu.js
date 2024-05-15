@@ -348,14 +348,14 @@ const CounterMenu = () => {
         </Button>
       }
     >
-      <Grid container spacing={1}>
+      <Grid container spacing={1} style={{ marginBottom: -7 }}>
         <Grid
           item
           xs={12}
           lg={1.5}
           md={2}
           sm={2}
-          // style={{marginTop: -15, marginLeft: -15}}
+          style={{ padding: 0 }}
           sx={{ padding: 0 }}
         >
           <Tabs
