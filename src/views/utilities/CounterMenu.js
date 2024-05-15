@@ -374,7 +374,10 @@ const CounterMenu = () => {
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
           >
-            {TypeOfProducts && TypeOfProducts.map((val) => <Tab label={val} />)}
+            {TypeOfProducts &&
+              TypeOfProducts.map((val) => (
+                <Tab style={{ fontSize: 18 }} label={val} />
+              ))}
           </Tabs>
         </Grid>
         <Grid

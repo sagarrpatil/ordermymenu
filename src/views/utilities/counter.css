@@ -32,7 +32,10 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #fff; /* Color of the thumb when hovered */
 }
-
+.MuiButtonBase-root.MuiTab-root.MuiTab-textColorInherit.Mui-selected {
+  background-color: #fff !important;
+  color: #000 !important;
+}
 /* Custom Scrollbar for Firefox */
 body {
   scrollbar-width: thin; /* Width of the scrollbar */
