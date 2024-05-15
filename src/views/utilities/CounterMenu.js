@@ -16,6 +16,10 @@ import Autocomplete from "@mui/material/Autocomplete";
 import RemoveIcon from "@mui/icons-material/Remove";
 import SubCard from "ui-component/cards/SubCard";
 import MainCard from "ui-component/cards/MainCard";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import { CardActionArea, CardActions } from "@mui/material";
 import { gridSpacing } from "store/constant";
 import { useEffect } from "react";
 import { realtimeDb, db } from "../../firebase";
@@ -317,9 +321,22 @@ const CounterMenu = () => {
   const printContainer = () => {
     window.print();
   };
+  const tableData =
+    menuList &&
+    menuList.length > 0 &&
+    menuList
+      .filter((item) =>
+        TypeOfProducts[valueOfTab] === "Favorite"
+          ? item.fav
+          : item.productType === TypeOfProducts[valueOfTab],
+      )
+      .filter((item) => {
+        return !menuStack.some((removeItem) => removeItem.id === item.id);
+      })
+      .sort((a, b) => a.productName.localeCompare(b.productName));
   return (
     <MainCard
-      title={"Order & Bill"}
+      title={"Table Number: " + table + ` (${section})`}
       secondary={
         <Button size="large" onClick={() => navigate(-1)}>
           Back
@@ -327,9 +344,6 @@ const CounterMenu = () => {
       }
     >
       <Grid container spacing={1}>
-        <Grid item xs={12} sx={{ padding: 1 }}>
-          <Typography>{"Table Number: " + table + ` (${section})`}</Typography>
-        </Grid>
         <Grid
           item
           xs={12}
@@ -359,49 +373,53 @@ const CounterMenu = () => {
         <Grid
           item
           xs={12}
-          lg={2}
+          lg={6}
           md={2}
           sm={2}
-          sx={{ backgroundColor: "#f2d4ac" }}
+          sx={{ backgroundColor: isSmallScreen ? "#f2d4ac" : "#fff" }}
         >
-          <Tabs
-            onChange={handleChangeSetValueTab}
-            orientation={isSmallScreen ? "horizontal" : "vertical"}
-            variant="scrollable"
-            scrollButtons="auto"
-            indicatorColor="secondary"
-            textColor="#000"
-            sx={{
-              backgroundColor: "#f2d4ac",
-              maxHeight: "71vh",
-              overflow: "scroll",
-            }}
-            aria-label="scrollable auto tabs example"
-          >
-            {menuList &&
-              menuList.length > 0 &&
-              menuList
-                .filter((item) =>
-                  TypeOfProducts[valueOfTab] === "Favorite"
-                    ? item.fav
-                    : item.productType === TypeOfProducts[valueOfTab],
-                )
-                .filter((item) => {
-                  return !menuStack.some(
-                    (removeItem) => removeItem.id === item.id,
-                  );
-                })
-                .sort((a, b) => a.productName.localeCompare(b.productName))
-                .map((val) => (
-                  <Tab
-                    sx={{ fontSize: 15 }}
-                    label={val.productName + ` ₹${val.productPrice}`}
-                  />
-                ))}
-          </Tabs>
+          {isSmallScreen ? (
+            <Tabs
+              onChange={handleChangeSetValueTab}
+              orientation={isSmallScreen ? "horizontal" : "vertical"}
+              variant="scrollable"
+              scrollButtons="auto"
+              indicatorColor="secondary"
+              textColor="#000"
+              sx={{
+                backgroundColor: "#f2d4ac",
+                maxHeight: "71vh",
+                overflow: "scroll",
+              }}
+              aria-label="scrollable auto tabs example"
+            >
+              {tableData.map((val) => (
+                <Tab
+                  sx={{ fontSize: 15 }}
+                  label={val.productName + ` ₹${val.productPrice}`}
+                />
+              ))}
+            </Tabs>
+          ) : (
+            <Grid container spacing={1}>
+              {tableData.map((val) => (
+                <Grid item lg={3}>
+                  <Card sx={{ backgroundColor: "#f2d4ac" }}>
+                    <CardActionArea onClick={handleChangeSetValueTab}>
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                          {val.productName + ` ₹${val.productPrice}`}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          )}
         </Grid>
 
-        <Grid item xs={12} lg={8} md={8} sm={8}>
+        <Grid item xs={12} lg={4} md={8} sm={8}>
           <br />
           {/* <SubCard title={"Table Number: " + table +` (${section})`} sx={{height:"80vh"}}> */}
           <Grid container>

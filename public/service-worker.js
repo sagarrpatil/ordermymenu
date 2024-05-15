@@ -10,7 +10,9 @@ this.self.addEventListener("fetch", (event) => {
   if (
     event.request.url.includes("/firestore.googleapis.com") ||
     event.request.url.includes("/google.firestore.v1.Firestore") ||  
+    event.request.url.includes("https://firestore.googleapis.com") ||  
      event.request.url.includes("firebase")
+     
      ||   event.request.url.includes("firestore")
   ) {
     return fetch(event.request);
