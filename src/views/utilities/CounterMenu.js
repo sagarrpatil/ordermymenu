@@ -347,7 +347,7 @@ const CounterMenu = () => {
         <Grid
           item
           xs={12}
-          lg={2}
+          lg={1}
           md={2}
           sm={2}
           sx={{ backgroundColor: "#ffb554" }}
@@ -373,7 +373,7 @@ const CounterMenu = () => {
         <Grid
           item
           xs={12}
-          lg={6}
+          lg={7}
           md={2}
           sm={2}
           sx={{ backgroundColor: isSmallScreen ? "#f2d4ac" : "#fff" }}
@@ -404,7 +404,7 @@ const CounterMenu = () => {
             <Grid container spacing={1}>
               {tableData.map((val) => (
                 <Grid item lg={3}>
-                  <Card sx={{ backgroundColor: "#f2d4ac" }}>
+                  <Card sx={{ backgroundColor: "#f2d4ac", height: 85 }}>
                     <CardActionArea onClick={handleChangeSetValueTab}>
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
