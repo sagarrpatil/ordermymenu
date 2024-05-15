@@ -35,7 +35,7 @@ import {
 } from "@firebase/firestore";
 import { useMediaQuery } from "@mui/material";
 import { getDatabase, ref, onValue, once, set } from "@firebase/database";
-import { height } from "@mui/system";
+import { height, padding } from "@mui/system";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -336,9 +336,14 @@ const CounterMenu = () => {
       .sort((a, b) => a.productName.localeCompare(b.productName));
   return (
     <MainCard
+      style={{ padding: 9 }}
       title={"Table Number: " + table + ` (${section})`}
       secondary={
-        <Button size="large" onClick={() => navigate(-1)}>
+        <Button
+          size="large"
+          sx={{ background: "#1E2938", color: "white", height: 25 }}
+          onClick={() => navigate(-1)}
+        >
           Back
         </Button>
       }
@@ -347,10 +352,11 @@ const CounterMenu = () => {
         <Grid
           item
           xs={12}
-          lg={1}
+          lg={1.5}
           md={2}
           sm={2}
-          sx={{ backgroundColor: "#ffb554" }}
+          // style={{marginTop: -15, marginLeft: -15}}
+          sx={{ padding: 0 }}
         >
           <Tabs
             value={valueOfTab}
@@ -358,8 +364,9 @@ const CounterMenu = () => {
             indicatorColor="secondary"
             textColor="inherit"
             sx={{
-              backgroundColor: "#ffb554",
+              backgroundColor: "#E34349",
               maxHeight: "71vh",
+              color: "#fff",
               overflow: "scroll",
             }}
             orientation={isSmallScreen ? "horizontal" : "vertical"}
@@ -376,7 +383,12 @@ const CounterMenu = () => {
           lg={7}
           md={2}
           sm={2}
-          sx={{ backgroundColor: isSmallScreen ? "#f2d4ac" : "#fff" }}
+          sx={{
+            backgroundColor: isSmallScreen ? "#f2d4ac" : "#fff",
+            background: "#F7C7C5",
+            maxHeight: "71vh",
+            overflow: "scroll",
+          }}
         >
           {isSmallScreen ? (
             <Tabs
@@ -387,7 +399,7 @@ const CounterMenu = () => {
               indicatorColor="secondary"
               textColor="#000"
               sx={{
-                backgroundColor: "#f2d4ac",
+                backgroundColor: "#F7C7C5",
                 maxHeight: "71vh",
                 overflow: "scroll",
               }}
@@ -403,8 +415,8 @@ const CounterMenu = () => {
           ) : (
             <Grid container spacing={1}>
               {tableData.map((val) => (
-                <Grid item lg={3}>
-                  <Card sx={{ backgroundColor: "#f2d4ac", height: 85 }}>
+                <Grid item lg={3} style={{ padding: 10 }}>
+                  <Card sx={{ backgroundColor: "#fff", height: 85 }}>
                     <CardActionArea onClick={handleChangeSetValueTab}>
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
@@ -419,7 +431,7 @@ const CounterMenu = () => {
           )}
         </Grid>
 
-        <Grid item xs={12} lg={4} md={8} sm={8}>
+        <Grid item xs={12} lg={3.5} md={8} sm={8} style={{ padding: 15 }}>
           <br />
           {/* <SubCard title={"Table Number: " + table +` (${section})`} sx={{height:"80vh"}}> */}
           <Grid container>

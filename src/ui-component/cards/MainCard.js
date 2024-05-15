@@ -32,6 +32,7 @@ const MainCard = forwardRef(
       shadow,
       sx = {},
       title,
+      style,
       ...others
     },
     ref,
@@ -69,7 +70,11 @@ const MainCard = forwardRef(
 
         {/* card content */}
         {content && (
-          <CardContent sx={contentSX} className={contentClass}>
+          <CardContent
+            style={style ? style : {}}
+            sx={contentSX}
+            className={contentClass}
+          >
             {children}
           </CardContent>
         )}
