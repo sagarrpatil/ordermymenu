@@ -54,7 +54,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 const TablerIcons = () => {
   const data = JSON.parse(atob(localStorage.getItem("token")));
   const [transaction, setTransaction] = useState([]);
-  const dbTransaction = new PouchDB("transaction");
+  const dbTransaction = /iPad|iPhone|iPod/.test(navigator.userAgent)
+    ? null
+    : new PouchDB("transaction");
   const [isLoading, setLoading] = useState(true);
   const currentTime = Date.now();
   const [fromdate, setFromDate] = React.useState(dayjs(currentTime));
@@ -121,21 +123,22 @@ const TablerIcons = () => {
         console.error("Error fetching data:", error);
       }
     } else {
-      dbTransaction
-        .get("0")
-        .then((latestDoc) => {
-          setLoading(false);
-          setTransaction(latestDoc.items);
-          console.log(
-            "Document retrieved successfully:",
-            latestDoc,
-            latestDoc.items,
-          );
-        })
-        .catch((err) => {
-          setLoading(false);
-          console.error("Error retrieving document:", err);
-        });
+      dbTransaction &&
+        dbTransaction
+          .get("0")
+          .then((latestDoc) => {
+            setLoading(false);
+            setTransaction(latestDoc.items);
+            console.log(
+              "Document retrieved successfully:",
+              latestDoc,
+              latestDoc.items,
+            );
+          })
+          .catch((err) => {
+            setLoading(false);
+            console.error("Error retrieving document:", err);
+          });
     }
   };
   function convertToUnixTimestamp(dateString) {

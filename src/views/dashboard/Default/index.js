@@ -32,7 +32,9 @@ const Dashboard = () => {
   const [orderTotalCash, setOrderTotalCash] = useState(0);
   const [orderTotalCard, setOrderTotalCard] = useState(0);
   const [TimeSet, setTimeSet] = useState("day");
-  const dbTransaction = new PouchDB("transaction");
+  const dbTransaction = /iPad|iPhone|iPod/.test(navigator.userAgent)
+    ? null
+    : new PouchDB("transaction");
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   useEffect(() => {
     fetchData("day");
@@ -68,27 +70,30 @@ const Dashboard = () => {
             _id: "0",
             items: items,
           };
-          dbTransaction
-            .get("0")
-            .then((latestDoc) => {
-              obj._rev = latestDoc._rev ? latestDoc._rev : null;
-              dbTransaction.put(obj, (err, response) => {
-                if (err) {
-                  console.log("Error creating object:", err);
-                } else {
-                  console.log("Object created successfully:", response);
-                }
+          dbTransaction &&
+            dbTransaction
+              .get("0")
+              .then((latestDoc) => {
+                obj._rev = latestDoc._rev ? latestDoc._rev : null;
+                dbTransaction &&
+                  dbTransaction.put(obj, (err, response) => {
+                    if (err) {
+                      console.log("Error creating object:", err);
+                    } else {
+                      console.log("Object created successfully:", response);
+                    }
+                  });
+              })
+              .catch((err) => {
+                dbTransaction &&
+                  dbTransaction.put(obj, (err, response) => {
+                    if (err) {
+                      console.log("Error creating object:", err);
+                    } else {
+                      console.log("Object created successfully:", response);
+                    }
+                  });
               });
-            })
-            .catch((err) => {
-              dbTransaction.put(obj, (err, response) => {
-                if (err) {
-                  console.log("Error creating object:", err);
-                } else {
-                  console.log("Object created successfully:", response);
-                }
-              });
-            });
 
           console.log(items);
         });
@@ -98,22 +103,23 @@ const Dashboard = () => {
         console.error("Error fetching data:", error);
       }
     } else {
-      dbTransaction
-        .get("0")
-        .then((latestDoc) => {
-          setLoading(false);
-          setTimeSet(time);
-          setTransaction(latestDoc.items);
-          console.log(
-            "Document retrieved successfully:",
-            latestDoc,
-            latestDoc.items,
-          );
-        })
-        .catch((err) => {
-          setLoading(false);
-          console.error("Error retrieving document:", err);
-        });
+      dbTransaction &&
+        dbTransaction
+          .get("0")
+          .then((latestDoc) => {
+            setLoading(false);
+            setTimeSet(time);
+            setTransaction(latestDoc.items);
+            console.log(
+              "Document retrieved successfully:",
+              latestDoc,
+              latestDoc.items,
+            );
+          })
+          .catch((err) => {
+            setLoading(false);
+            console.error("Error retrieving document:", err);
+          });
     }
   };
 
