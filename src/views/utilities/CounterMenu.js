@@ -408,28 +408,32 @@ const CounterMenu = () => {
               }}
               aria-label="scrollable auto tabs example"
             >
-              {tableData && tableData.length>0 && tableData.map((val) => (
-                <Tab
-                  sx={{ fontSize: 15 }}
-                  label={val.productName + ` ₹${val.productPrice}`}
-                />
-              ))}
+              {tableData &&
+                tableData.length > 0 &&
+                tableData.map((val) => (
+                  <Tab
+                    sx={{ fontSize: 15 }}
+                    label={val.productName + ` ₹${val.productPrice}`}
+                  />
+                ))}
             </Tabs>
           ) : (
             <Grid container spacing={1}>
-              {tableData && tableData.length>0 && tableData.map((val) => (
-                <Grid item lg={3} style={{ padding: 10 }}>
-                  <Card sx={{ backgroundColor: "#fff", height: 85 }}>
-                    <CardActionArea onClick={handleChangeSetValueTab}>
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          {val.productName + ` ₹${val.productPrice}`}
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </Grid>
-              ))}
+              {tableData &&
+                tableData.length > 0 &&
+                tableData.map((val) => (
+                  <Grid item lg={3} style={{ padding: 10 }}>
+                    <Card sx={{ backgroundColor: "#fff", height: 85 }}>
+                      <CardActionArea onClick={handleChangeSetValueTab}>
+                        <CardContent>
+                          <Typography gutterBottom variant="h5" component="div">
+                            {val.productName + ` ₹${val.productPrice}`}
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                  </Grid>
+                ))}
             </Grid>
           )}
         </Grid>

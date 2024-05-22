@@ -299,7 +299,9 @@ function Row(props) {
           )}
         </TableCell>
         <TableCell align="right" sx={{ padding: 1 }}>
-          {row.transaction.map((item) => item.label).join(",")}
+          {row.transaction
+            .map((item) => item.label + `: ₹${item.value}`)
+            .join(", ")}
         </TableCell>
       </TableRow>
       <TableRow>
