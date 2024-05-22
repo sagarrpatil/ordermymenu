@@ -1,14 +1,17 @@
 import PropTypes from "prop-types";
 import { forwardRef } from "react";
-
+import { useNavigate } from "react-router-dom";
 // material-ui
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useTheme } from "@mui/material/styles";
 import {
   Card,
   CardContent,
   CardHeader,
   Divider,
+  Button,
   Typography,
+  IconButton,
 } from "@mui/material";
 
 // constant
@@ -31,6 +34,7 @@ const MainCard = forwardRef(
       secondary,
       shadow,
       sx = {},
+      back,
       title,
       style,
       ...others
@@ -38,7 +42,7 @@ const MainCard = forwardRef(
     ref,
   ) => {
     const theme = useTheme();
-
+    const navigate = useNavigate();
     return (
       <Card
         ref={ref}
@@ -57,10 +61,21 @@ const MainCard = forwardRef(
         {/* card header and action */}
         {title && (
           <CardHeader
-            sx={headerSX}
-            title={
-              darkTitle ? <Typography variant="h3">{title}</Typography> : title
+            avatar={
+              back ? (
+                <IconButton
+                  size="large"
+                  sx={{ background: "#1E2938", color: "white", padding: 0 }}
+                  onClick={() => navigate(-1)}
+                >
+                  <ChevronLeftIcon style={{ fontSize: 29 }} />
+                </IconButton>
+              ) : (
+                ""
+              )
             }
+            sx={headerSX}
+            title={title}
             action={secondary}
           />
         )}
@@ -92,6 +107,7 @@ MainCard.propTypes = {
   contentClass: PropTypes.string,
   contentSX: PropTypes.object,
   darkTitle: PropTypes.bool,
+  back: PropTypes.bool,
   secondary: PropTypes.oneOfType([
     PropTypes.node,
     PropTypes.string,

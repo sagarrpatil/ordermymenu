@@ -338,14 +338,38 @@ const CounterMenu = () => {
     <MainCard
       style={{ padding: 9 }}
       title={"Table Number: " + table + ` (${section})`}
+      back={true}
       secondary={
-        <Button
-          size="large"
-          sx={{ background: "#1E2938", color: "white", height: 25 }}
-          onClick={() => navigate(-1)}
-        >
-          Back
-        </Button>
+        !isSmallScreen && (
+          <Autocomplete
+            disablePortal
+            value={productName?.productName}
+            onChange={(event, newValue) => onChangeProductName(event, newValue)}
+            id="combo-box-demo"
+            options={menuList.filter((item) => {
+              return !menuStack.some((removeItem) => removeItem.id === item.id);
+            })}
+            onClose={() => setProductName("")}
+            getOptionLabel={(option) => option.productName}
+            sx={{ width: "33vw", fontSize: 20 }}
+            renderInput={(params) => (
+              <TextField
+                variant="filled"
+                {...params}
+                label="Product Search and Add"
+              />
+            )}
+            renderOption={(props, option) => (
+              <Box
+                component="li"
+                sx={{ height: 50, background: "#e3e3e3", fontSize: 20 }}
+                {...props}
+              >
+                {option.productName} (₹ {option.productPrice})
+              </Box>
+            )}
+          />
+        )
       }
     >
       <Grid container spacing={1} style={{ marginBottom: -7 }}>
@@ -442,40 +466,42 @@ const CounterMenu = () => {
           <br />
           {/* <SubCard title={"Table Number: " + table +` (${section})`} sx={{height:"80vh"}}> */}
           <Grid container>
-            <Grid item xs={12}>
-              <Autocomplete
-                disablePortal
-                value={productName?.productName}
-                onChange={(event, newValue) =>
-                  onChangeProductName(event, newValue)
-                }
-                id="combo-box-demo"
-                options={menuList.filter((item) => {
-                  return !menuStack.some(
-                    (removeItem) => removeItem.id === item.id,
-                  );
-                })}
-                onClose={() => setProductName("")}
-                getOptionLabel={(option) => option.productName}
-                sx={{ width: "100%", fontSize: 20 }}
-                renderInput={(params) => (
-                  <TextField
-                    variant="filled"
-                    {...params}
-                    label="Product Name"
-                  />
-                )}
-                renderOption={(props, option) => (
-                  <Box
-                    component="li"
-                    sx={{ height: 50, background: "#e3e3e3", fontSize: 20 }}
-                    {...props}
-                  >
-                    {option.productName} (₹ {option.productPrice})
-                  </Box>
-                )}
-              />
-            </Grid>
+            {isSmallScreen && (
+              <Grid item xs={12}>
+                <Autocomplete
+                  disablePortal
+                  value={productName?.productName}
+                  onChange={(event, newValue) =>
+                    onChangeProductName(event, newValue)
+                  }
+                  id="combo-box-demo"
+                  options={menuList.filter((item) => {
+                    return !menuStack.some(
+                      (removeItem) => removeItem.id === item.id,
+                    );
+                  })}
+                  onClose={() => setProductName("")}
+                  getOptionLabel={(option) => option.productName}
+                  sx={{ width: "100%", fontSize: 20 }}
+                  renderInput={(params) => (
+                    <TextField
+                      variant="filled"
+                      {...params}
+                      label="Product Search"
+                    />
+                  )}
+                  renderOption={(props, option) => (
+                    <Box
+                      component="li"
+                      sx={{ height: 50, background: "#e3e3e3", fontSize: 20 }}
+                      {...props}
+                    >
+                      {option.productName} (₹ {option.productPrice})
+                    </Box>
+                  )}
+                />
+              </Grid>
+            )}
             <Grid
               item
               xs={12}
@@ -535,19 +561,21 @@ const CounterMenu = () => {
                   ))}
               </List>
             </Grid>
-            <Grid item xs={12}>
-              <Divider />
-              <center>
-                <h3>
-                  Total Amount:{" "}
-                  {totalCost.toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                </h3>
-              </center>
-              <Divider />
-            </Grid>
+            {totalCost > 0 && (
+              <Grid item xs={12}>
+                <Divider />
+                <center>
+                  <h3>
+                    Total Amount:{" "}
+                    {totalCost.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </h3>
+                </center>
+                <Divider />
+              </Grid>
+            )}
             {menuStack.length > 0 && (
               <Grid item xs={12}>
                 <center style={{ padding: 10 }}>
