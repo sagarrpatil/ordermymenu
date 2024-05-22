@@ -22,6 +22,14 @@ const utilities = {
   type: "group",
   children: [
     {
+      id: "Counter",
+      title: "Counter & Bills",
+      type: "item",
+      url: "/utils/Counter",
+      icon: icons.IconShadow,
+      breadcrumbs: false,
+    },
+    {
       id: "util-typography",
       title: "Menu Management",
       type: "item",
@@ -37,14 +45,7 @@ const utilities = {
     //   icon: icons.IconPalette,
     //   breadcrumbs: false
     // },
-    {
-      id: "Counter",
-      title: "Counter & Bills",
-      type: "item",
-      url: "/utils/Counter",
-      icon: icons.IconShadow,
-      breadcrumbs: false,
-    },
+
     {
       id: "icons",
       title: "Sells Transaction",
