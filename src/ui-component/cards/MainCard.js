@@ -63,13 +63,19 @@ const MainCard = forwardRef(
           <CardHeader
             avatar={
               back ? (
-                <IconButton
+                <Button
                   size="large"
-                  sx={{ background: "#1E2938", color: "white", padding: 0 }}
+                  style={{
+                    background: "#1E2938",
+                    color: "white",
+                    padding: 0,
+                    fontSize: 13,
+                    height: 30,
+                  }}
                   onClick={() => navigate(-1)}
                 >
-                  <ChevronLeftIcon style={{ fontSize: 29 }} />
-                </IconButton>
+                  <ChevronLeftIcon style={{ fontSize: 25 }} /> Back
+                </Button>
               ) : (
                 ""
               )

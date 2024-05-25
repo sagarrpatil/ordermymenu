@@ -65,7 +65,11 @@ const TablerIcons = () => {
   const [orderTotalValue, setOrderTotalValue] = useState(0);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(25);
+  const [rowsPerPage, setRowsPerPage] = React.useState(1000);
+  let counter = localStorage.getItem("dataTab")
+    ? atob(localStorage.getItem("dataTab"))
+    : null;
+  const [counterList, setCounterList] = React.useState(JSON.parse(counter));
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -78,6 +82,9 @@ const TablerIcons = () => {
 
   useEffect(() => {
     fetchData();
+    if (localStorage.getItem("dataTab") === null) {
+      fetchDataOfTable();
+    }
   }, []);
   useEffect(() => {
     const handleOnlineStatusChange = () => {
@@ -194,6 +201,44 @@ const TablerIcons = () => {
     return orderTotal;
   };
 
+  const fetchDataOfTable = async () => {
+    try {
+      const userDocRef = doc(db, data.user.email, "CounterSection");
+      const contersCollectionRef = collection(userDocRef, "CounterSection");
+      const querySnapshot = await getDocs(contersCollectionRef);
+      const items = [];
+      querySnapshot.forEach((doc) => {
+        items.push({ id: doc.id, ...doc.data() });
+      });
+      const sortedData = items.sort((a, b) => {
+        const numberA = a.counterSection.match(/\d+/)?.[0] || 0;
+        const numberB = b.counterSection.match(/\d+/)?.[0] || 0;
+        if (!isNaN(numberA) && !isNaN(numberB)) {
+          return numberA - numberB;
+        }
+        return a.counterSection.localeCompare(b.counterSection, undefined, {
+          sensitivity: "case",
+        });
+      });
+      const groupedByCounterSection = sortedData.reduce((acc, item) => {
+        const section = item.counterSection;
+        acc[section] = (acc[section] || []).concat(item);
+        return acc;
+      }, {});
+
+      const result = Object.values(groupedByCounterSection).map(
+        (sectionArray) =>
+          sectionArray.sort((a, b) =>
+            a.counterSection.localeCompare(b.counterSection),
+          ),
+      );
+      setCounterList(result);
+      localStorage.setItem("dataTab", btoa(JSON.stringify(result)));
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   return (
     <MainCard
       title="Sells"
@@ -243,13 +288,18 @@ const TablerIcons = () => {
                 <StyledTableCell align="right" sx={{ padding: 1 }}>
                   Mode
                 </StyledTableCell>
+                <StyledTableCell align="right" sx={{ padding: 1 }}>
+                  Table Section
+                </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {tableData &&
                 tableData
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => <Row key={row.id} row={row} />)}
+                  .map((row) => (
+                    <Row counterList={counterList} key={row.id} row={row} />
+                  ))}
             </TableBody>
           </Table>
         </TableContainer>
@@ -275,6 +325,12 @@ function Row(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
 
+  function gettableById(id) {
+    let value = props.counterList.flat().find((x) => x.id === id);
+    return value
+      ? value.counterNumber + " (" + value.counterSection + ")"
+      : "NA";
+  }
   return (
     <React.Fragment>
       <TableRow
@@ -305,6 +361,9 @@ function Row(props) {
           {row.transaction
             .map((item) => item.label + `: ₹${item.value}`)
             .join(", ")}
+        </TableCell>
+        <TableCell align="right" sx={{ padding: 1 }}>
+          {gettableById(row.id)}
         </TableCell>
       </TableRow>
       <TableRow>
